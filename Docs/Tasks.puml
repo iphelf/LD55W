@@ -38,7 +38,7 @@ state "游戏内/\n随机配置关卡" as LevelConfig $Stage2
 Gameplay --> MultiLevel
 state "游戏内/\n多关卡流程" as MultiLevel $Stage2
 
-Gameplay --> SimpleAI
+SingleLevelCli --> SimpleAI
 state "游戏内/\n简单AI" as SimpleAI $Stage2
 
 [*] --> Dialogs
