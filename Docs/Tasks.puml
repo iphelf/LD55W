@@ -1,0 +1,52 @@
+﻿@startuml
+'https://plantuml.com/state-diagram
+'Colors:
+!$Stage1="#E2F4C5"
+!$Stage2="#A8CD9F"
+!$Stage3="#58A399"
+!$Stage4="#496989"
+
+skinparam DefaultFontName Sarasa Gothic SC
+hide empty description
+
+[*] --> SingleLevelCli
+state "单关命令行游戏" as SingleLevelCli $Stage1
+
+[*] --> TitlePage
+[*] --> GameOverPage
+[*] --> CreditsPage
+state "游戏外/\n标题界面" as TitlePage $Stage2
+state "游戏外/\n结束界面" as GameOverPage $Stage2
+state "游戏外/\nCredits界面" as CreditsPage $Stage2
+TitlePage --> InterPage
+GameOverPage --> InterPage
+CreditsPage --> InterPage
+state "游戏外/\n界面间跳转" as InterPage $Stage2
+
+SingleLevelCli --> Game
+state "游戏内 (概览)" as Game $Stage2
+
+Game --> Gameplay
+state "游戏内/\n场景交互" as Gameplay $Stage2
+
+Game --> GameplayUI
+state "游戏内/\n游戏UI" as GameplayUI $Stage2
+
+Game --> LevelConfig
+state "游戏内/\n随机配置关卡" as LevelConfig $Stage2
+
+Gameplay --> MultiLevel
+state "游戏内/\n多关卡流程" as MultiLevel $Stage2
+
+Gameplay --> SimpleAI
+state "游戏内/\n简单AI" as SimpleAI $Stage2
+
+[*] --> Dialogs
+state "游戏内/\n对话系统" as Dialogs $Stage2
+
+MultiLevel --> GameIntegration
+GameplayUI --> GameIntegration
+Dialogs --> GameIntegration
+state "游戏内 (集成)" as GameIntegration $Stage2
+
+@enduml
