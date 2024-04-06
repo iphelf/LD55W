@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Roulette/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
+    path: Assets/Roulette/Scenes/LevelConsole.unity
+    guid: 5c5deb6cc50c8a04f8d3cd7ea023d098
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0
