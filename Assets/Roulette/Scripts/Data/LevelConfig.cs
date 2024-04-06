@@ -17,13 +17,17 @@ namespace Roulette.Scripts.Data
         public int itemCountPerRound = 1;
 
         [Serializable]
-        public class ItemWeight
+        public struct ItemWeight
         {
             public ItemType item;
             public float weight;
         }
 
-        public List<ItemWeight> itemWeights = new();
+        public List<ItemWeight> itemWeights = new(new[]
+        {
+            new ItemWeight { item = ItemType.MagnifyingGlass, weight = 1.0f }
+        });
+
         public int itemCapacity = 8;
 
         private float _totalWeight;

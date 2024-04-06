@@ -1,3 +1,4 @@
+using Roulette.Scripts.Data;
 using Roulette.Scripts.General;
 using Roulette.Scripts.Managers;
 using UnityEngine;
@@ -7,10 +8,11 @@ namespace Roulette.Scripts.SceneCtrls
     public class LevelCtrl : MonoBehaviour
     {
         [SerializeField] private GameManager game;
+        [SerializeField] private LevelConfig levelConfig;
 
         private async void Start()
         {
-            Dummy.PerformQuickTask("读取关卡配置");
+            LevelManager.InitializeOnce(levelConfig);
 
             await Dummy.PerformTask("关卡开场仪式");
 
