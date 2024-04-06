@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b922ff675f64364aee18f1259b4ac5b, type: 3}
   m_Name: level console demo
   m_EditorClassIdentifier: 
+  initialHealth: 3
+  bullets: 000100
   itemCountPerRound: 2
   itemWeights:
   - item: 2

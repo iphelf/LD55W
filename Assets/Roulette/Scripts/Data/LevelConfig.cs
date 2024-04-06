@@ -10,6 +10,10 @@ namespace Roulette.Scripts.Data
     [CreateAssetMenu(menuName = "Scriptable Object/Level Config", fileName = "level")]
     public class LevelConfig : ScriptableObject
     {
+        public int initialHealth = 2;
+
+        public List<bool> bullets = new(new[] { false, true, false });
+
         public int itemCountPerRound = 1;
 
         [Serializable]

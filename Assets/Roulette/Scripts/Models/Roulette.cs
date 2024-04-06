@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Roulette.Scripts.Models
 {
@@ -11,6 +12,7 @@ namespace Roulette.Scripts.Models
         public Roulette(IEnumerable<bool> bullets)
         {
             Bullets = new List<bool>(bullets);
+            Bullets.Reverse();
             ResetDamage();
         }
 

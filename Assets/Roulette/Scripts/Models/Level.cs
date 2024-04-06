@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using NUnit.Framework;
 using Roulette.Scripts.Data;
 using UnityEngine;
 
@@ -25,8 +27,8 @@ namespace Roulette.Scripts.Models
         public Level(LevelConfig config)
         {
             _config = config;
-            PlayerImpl player1 = new(PlayerIndex.P1, this, 2);
-            PlayerImpl player2 = new(PlayerIndex.P2, this, 2);
+            PlayerImpl player1 = new(PlayerIndex.P1, this, _config.initialHealth);
+            PlayerImpl player2 = new(PlayerIndex.P2, this, _config.initialHealth);
             player1.Other = player2;
             player2.Other = player1;
             Player1 = player1;
@@ -37,7 +39,7 @@ namespace Roulette.Scripts.Models
 
         private void NewRound()
         {
-            Roulette = new Roulette(new[] { false, false, true });
+            Roulette = new Roulette(_config.bullets);
             AssignItems(Player1);
             AssignItems(Player2);
             Turn = PlayerIndex.P1;
@@ -46,7 +48,7 @@ namespace Roulette.Scripts.Models
         private void AssignItems(Player player)
         {
             int itemCount = Mathf.Min(_config.itemCountPerRound, _config.itemCapacity - player.Items.Count);
-            for (int i = 0; i < _config.itemCountPerRound && itemCount >= 0; ++i)
+            for (int i = 0; i < _config.itemCapacity && itemCount >= 0; ++i)
             {
                 if (player.Items.ContainsKey(i)) continue;
                 player.Items.Add(i, _config.SampleItem());
