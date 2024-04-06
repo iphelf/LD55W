@@ -277,6 +277,7 @@ MonoBehaviour:
   recordPrefab: {fileID: 306565971853782273, guid: a3c1552de91e5ee469ed2a48fe88a3e8, type: 3}
   recordList: {fileID: 404282600}
   inputField: {fileID: 1218080806}
+  levelConfig: {fileID: 11400000, guid: 73abbcf9d4acb294f934430cf1107e66, type: 2}
 --- !u!4 &281555204
 Transform:
   m_ObjectHideFlags: 0
@@ -326,8 +327,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 862, y: -432.34}
-  m_SizeDelta: {x: 602.0056, y: 327.3662}
+  m_AnchoredPosition: {x: 862, y: -0.86157}
+  m_SizeDelta: {x: 602.0056, y: 1190.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &347484607
 MonoBehaviour:
@@ -349,9 +350,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '
+  m_text: '`f s`: fire self
 
-'
+    `f o`: fire other
+
+    `u #`: use #-th item
+
+    `n`:
+    start a new level'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

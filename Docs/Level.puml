@@ -1,0 +1,25 @@
+﻿@startuml
+'https://plantuml.com/state-diagram
+
+skinparam DefaultFontName Sarasa Gothic SC
+hide empty description
+
+[*] --> RefillBullets
+state "装弹" as RefillBullets
+
+RefillBullets --> AssignItems
+state "分配道具" as AssignItems
+
+AssignItems --> PlayerTurns
+state "轮流行动" as PlayerTurns {
+    state "玩家1的回合" as P1Turn
+    P1Turn -> P2Turn
+    state "玩家2的回合" as P2Turn
+    P2Turn -> P1Turn
+}
+
+PlayerTurns --> RefillBullets: 弹药耗尽
+
+PlayerTurns --> [*]: 阵亡
+
+@enduml
