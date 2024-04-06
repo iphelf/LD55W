@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Roulette.Scripts.Models
 {
@@ -11,10 +12,24 @@ namespace Roulette.Scripts.Models
 
     public abstract class Player
     {
-        public abstract int Health { get; }
+        public int Health { get; protected set; }
         public abstract void FireSelf();
         public abstract void FireOther();
-        public SortedDictionary<int, ItemType> Items = new();
+
+        #region Items
+
+        public readonly SortedDictionary<int, ItemType> Items = new();
         public abstract void UseItem(int index);
+
+        public event EventHandler<MagnifyingGlassEventArgs> EffectOfMagnifyingGlass;
+
+        protected void CauseEffectOfMagnifyingGlass(bool isReal)
+        {
+            EffectOfMagnifyingGlass?.Invoke(this, new MagnifyingGlassEventArgs() { IsReal = isReal });
+        }
+
+        public bool IsHandCuffed { get; protected set; }
+
+        #endregion
     }
 }

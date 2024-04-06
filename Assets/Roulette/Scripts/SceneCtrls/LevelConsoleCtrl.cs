@@ -5,7 +5,6 @@ using Roulette.Scripts.Data;
 using Roulette.Scripts.Models;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Roulette.Scripts.SceneCtrls
@@ -22,22 +21,32 @@ namespace Roulette.Scripts.SceneCtrls
 
         private void Start()
         {
+            NewLevel();
+            ShowLevelState();
+        }
+
+        private void NewLevel()
+        {
             _level = new Level(levelConfig);
             _levelStep = 0;
-            ShowLevelState();
+            _level.Player1.EffectOfMagnifyingGlass += (_, args) => { Output($"{PlayerIndex.P1} sees {args.IsReal}."); };
+            _level.Player2.EffectOfMagnifyingGlass += (_, args) => { Output($"{PlayerIndex.P2} sees {args.IsReal}."); };
         }
 
         private void ShowLevelState()
         {
-            string infoLevel = $"Level Step={_levelStep}, Turn={_level.Turn}, Bullets={_level.BulletCount}";
+            string infoLevel =
+                _level.Turn == PlayerIndex.None
+                    ? $"Level Step={_levelStep}, Winner={_level.Winner}."
+                    : $"Level Step={_levelStep}, Turn={_level.Turn}, Bullets={_level.BulletCount}.";
 
             string SerializeDict(SortedDictionary<int, ItemType> dict) =>
-                "{" + string.Join(',', dict.Select(p => $"{p.Key}:{p.Value}")) + "}";
+                "{" + string.Join(", ", dict.Select(p => $"{p.Key}:{p.Value}")) + "}";
 
             string infoP1 =
-                $"{PlayerIndex.P1}: HP={_level.Player1.Health}, Items={SerializeDict(_level.Player1.Items)}";
+                $"{PlayerIndex.P1}: HP={_level.Player1.Health}, Items={SerializeDict(_level.Player1.Items)}, HC={_level.Player1.IsHandCuffed}.";
             string infoP2 =
-                $"{PlayerIndex.P2}: HP={_level.Player2.Health}, Items={SerializeDict(_level.Player2.Items)}";
+                $"{PlayerIndex.P2}: HP={_level.Player2.Health}, Items={SerializeDict(_level.Player2.Items)}, HC={_level.Player2.IsHandCuffed}.";
             string info = string.Join("\n", infoLevel, infoP1, infoP2);
             Output(info);
         }
@@ -74,13 +83,14 @@ namespace Roulette.Scripts.SceneCtrls
 
                     break;
                 case 'u': // use
-                    int item = int.Parse(tokens[2]);
-                    Output($"{_level.Turn} uses item");
+                    int item = int.Parse(tokens[1]);
+                    Output($"{_level.Turn} uses item {_level.CurrentPlayer.Items[item]}.");
                     _level.CurrentPlayer.UseItem(item);
                     break;
                 case 'n': // new
-                    _level = new Level(levelConfig);
-                    _levelStep = -1;
+                    Output("New Level");
+                    NewLevel();
+                    --_levelStep;
                     break;
                 default:
                     return false;

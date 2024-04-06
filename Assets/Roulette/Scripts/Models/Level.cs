@@ -6,7 +6,7 @@ namespace Roulette.Scripts.Models
 {
     public class Level
     {
-        private LevelConfig _config;
+        private readonly LevelConfig _config;
         public Player Player1 { get; }
         public Player Player2 { get; }
 
@@ -17,7 +17,7 @@ namespace Roulette.Scripts.Models
             _ => null,
         };
 
-        private Roulette Roulette { get; set; }
+        public Roulette Roulette { get; set; }
         public int BulletCount => Roulette.Count;
         public PlayerIndex Turn { get; private set; } = PlayerIndex.None;
         public PlayerIndex Winner { get; private set; } = PlayerIndex.None;
@@ -38,7 +38,20 @@ namespace Roulette.Scripts.Models
         private void NewRound()
         {
             Roulette = new Roulette(new[] { false, false, true });
+            AssignItems(Player1);
+            AssignItems(Player2);
             Turn = PlayerIndex.P1;
+        }
+
+        private void AssignItems(Player player)
+        {
+            int itemCount = Mathf.Min(_config.itemCountPerRound, _config.itemCapacity - player.Items.Count);
+            for (int i = 0; i < _config.itemCountPerRound && itemCount >= 0; ++i)
+            {
+                if (player.Items.ContainsKey(i)) continue;
+                player.Items.Add(i, _config.SampleItem());
+                --itemCount;
+            }
         }
 
         private void OnTurnOver()
@@ -48,7 +61,14 @@ namespace Roulette.Scripts.Models
             else if (Roulette.Count == 0)
                 NewRound();
             else
+            {
                 Turn = Turn == PlayerIndex.P1 ? PlayerIndex.P2 : PlayerIndex.P1;
+                if (CurrentPlayer.IsHandCuffed)
+                {
+                    (CurrentPlayer as PlayerImpl)?.SetHandCuffed(false);
+                    OnTurnOver();
+                }
+            }
         }
 
         private void OnLevelOver()
@@ -61,15 +81,13 @@ namespace Roulette.Scripts.Models
         {
             private readonly PlayerIndex _index;
             private readonly Level _level;
-            private int _health;
-            public override int Health => _health;
             public PlayerImpl Other;
 
             public PlayerImpl(PlayerIndex index, Level level, int health)
             {
                 _index = index;
                 _level = level;
-                _health = health;
+                Health = health;
             }
 
             public override void FireSelf()
@@ -77,7 +95,7 @@ namespace Roulette.Scripts.Models
                 if (!IsMyTurn()) return;
                 int damage = _level.Roulette.Fire();
                 if (damage == 0 && _level.BulletCount > 0) return; // extend this turn
-                _health -= damage;
+                Health -= damage;
                 _level.OnTurnOver();
             }
 
@@ -85,13 +103,33 @@ namespace Roulette.Scripts.Models
             {
                 if (!IsMyTurn()) return;
                 int damage = _level.Roulette.Fire();
-                Other._health -= damage;
+                Other.Health -= damage;
                 _level.OnTurnOver();
             }
 
             public override void UseItem(int index)
             {
                 if (!IsMyTurn()) return;
+                ItemType item = Items[index];
+                switch (item)
+                {
+                    case ItemType.MagnifyingGlass:
+                        CauseEffectOfMagnifyingGlass(_level.Roulette.Bullets[^1]);
+                        break;
+                    case ItemType.HandCuffs:
+                        if (Other.IsHandCuffed) return;
+                        Other.SetHandCuffed(true);
+                        break;
+                    default:
+                        throw new NotImplementedException($"Item: {item}");
+                }
+
+                Items.Remove(index);
+            }
+
+            public void SetHandCuffed(bool isHandCuffed)
+            {
+                IsHandCuffed = isHandCuffed;
             }
 
             private bool IsMyTurn()
