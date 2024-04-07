@@ -67,13 +67,13 @@ namespace Roulette.Scripts.Models
             await Dummy.PerformTask("展示炸弹爆炸后摇");
         }
 
-        public virtual async Awaitable PlayCeremonyOnTurnEnd()
+        public virtual async Awaitable PlayCeremonyOnTurnEnd(PlayerIndex playerIndex)
             => await Dummy.PerformTask("回合谢幕仪式");
 
         public virtual async Awaitable PlayCeremonyOnRoundEnd()
             => await Dummy.PerformTask("轮次谢幕仪式");
 
-        public virtual async Awaitable PlayCeremonyOnLevelEnd()
+        public virtual async Awaitable PlayCeremonyOnLevelEnd(PlayerIndex winner)
             => await Dummy.PerformTask("关卡谢幕仪式");
     }
 }

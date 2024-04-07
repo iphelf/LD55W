@@ -38,7 +38,8 @@ namespace Roulette.Scripts.Models
             do await NewRound();
             while (!IsLevelOver());
 
-            await _presentation.PlayCeremonyOnLevelEnd();
+            await _presentation.PlayCeremonyOnLevelEnd(
+                _data.Player2.Health <= 0 ? PlayerIndex.P1 : PlayerIndex.P2);
         }
 
         private static readonly PlayerIndex[] PlayerIndices = { PlayerIndex.P1, PlayerIndex.P2 };
@@ -91,7 +92,7 @@ namespace Roulette.Scripts.Models
                 if (IsLevelOver()) return;
             }
 
-            await _presentation.PlayCeremonyOnTurnEnd();
+            await _presentation.PlayCeremonyOnTurnEnd(playerIndex);
         }
 
         private async Awaitable<bool> NewActionAndEndTurn(PlayerIndex playerIndex)
@@ -113,6 +114,7 @@ namespace Roulette.Scripts.Models
         private async Awaitable HandleFiringGun(PlayerIndex playerIndex, PlayerFiresGun playerFiresGun)
         {
             bool isReal = _data.Round.BulletQueue.Peek;
+            _data.Round.BulletQueue.Pop();
             await _presentation.PlayBombEffect(playerIndex, playerFiresGun.Target, isReal, () =>
             {
                 if (isReal)
@@ -159,7 +161,14 @@ namespace Roulette.Scripts.Models
 
         private class LevelInfoImpl : LevelInfo
         {
+            public override int Health(PlayerIndex playerIndex) => _driver.Player(playerIndex).Health;
             public override int CardCapacity => _driver._config.itemCapacity;
+
+            public override ItemType Item(PlayerIndex playerIndex, int itemIndex)
+            {
+                var player = _driver.Player(playerIndex);
+                return player.Items.GetValueOrDefault(itemIndex, ItemType.None);
+            }
 
             public override bool IsItemUsable(PlayerIndex playerIndex, ItemType item)
             {
@@ -170,6 +179,8 @@ namespace Roulette.Scripts.Models
                     _ => false,
                 };
             }
+
+            public override int BulletCount => _driver._data.Round.BulletQueue.Count;
 
             private readonly LevelDriver _driver;
 
