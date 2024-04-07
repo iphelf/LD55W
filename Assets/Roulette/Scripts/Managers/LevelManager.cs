@@ -5,7 +5,7 @@ namespace Roulette.Scripts.Managers
 {
     public class LevelManager
     {
-        public static Level Current => _instance._current;
+        public static LevelDemo Current => _instance._current;
         public static void InitializeOnce(LevelConfig config) => _instance ??= new LevelManager(config);
 
         public static bool SwitchToNext()
@@ -15,14 +15,14 @@ namespace Roulette.Scripts.Managers
 
         private static LevelManager _instance;
 
-        private Level _current;
+        private LevelDemo _current;
         private readonly LevelConfig _config;
         private int _levelCount = 2;
 
         private LevelManager(LevelConfig config)
         {
             _config = config;
-            _current = new Level(config);
+            _current = new LevelDemo(config);
         }
 
         private bool SwitchToNextLevel()
@@ -35,7 +35,7 @@ namespace Roulette.Scripts.Managers
             }
             else
             {
-                _current = new Level(_config);
+                _current = new LevelDemo(_config);
                 return true;
             }
         }

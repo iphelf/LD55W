@@ -16,7 +16,7 @@ namespace Roulette.Scripts.SceneCtrls
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private LevelConfig levelConfig;
 
-        private Level _level;
+        private LevelDemo _level;
         private int _levelStep;
 
         private void Start()
@@ -27,7 +27,7 @@ namespace Roulette.Scripts.SceneCtrls
 
         private void NewLevel()
         {
-            _level = new Level(levelConfig);
+            _level = new LevelDemo(levelConfig);
             _levelStep = 0;
             _level.Player1.EffectOfMagnifyingGlass += (_, args) => { Output($"{PlayerIndex.P1} sees {args.IsReal}."); };
             _level.Player2.EffectOfMagnifyingGlass += (_, args) => { Output($"{PlayerIndex.P2} sees {args.IsReal}."); };

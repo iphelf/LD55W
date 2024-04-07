@@ -10,6 +10,16 @@ namespace Roulette.Scripts.Models
         P2 = 2,
     }
 
+    public static class PlayerIndices
+    {
+        public static PlayerIndex Other(this PlayerIndex index) => index switch
+        {
+            PlayerIndex.P1 => PlayerIndex.P2,
+            PlayerIndex.P2 => PlayerIndex.P1,
+            _ => PlayerIndex.None,
+        };
+    }
+
     public abstract class Player
     {
         public int Health { get; protected set; }

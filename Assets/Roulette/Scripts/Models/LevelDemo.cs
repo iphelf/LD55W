@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Linq;
-using NUnit.Framework;
 using Roulette.Scripts.Data;
 using UnityEngine;
 
 namespace Roulette.Scripts.Models
 {
-    public class Level
+    public class LevelDemo
     {
         private readonly LevelConfig _config;
         public Player Player1 { get; }
@@ -24,7 +22,7 @@ namespace Roulette.Scripts.Models
         public PlayerIndex Turn { get; private set; } = PlayerIndex.None;
         public PlayerIndex Winner { get; private set; } = PlayerIndex.None;
 
-        public Level(LevelConfig config)
+        public LevelDemo(LevelConfig config)
         {
             _config = config;
             PlayerImpl player1 = new(PlayerIndex.P1, this, _config.initialHealth);
@@ -82,10 +80,10 @@ namespace Roulette.Scripts.Models
         private class PlayerImpl : Player
         {
             private readonly PlayerIndex _index;
-            private readonly Level _level;
+            private readonly LevelDemo _level;
             public PlayerImpl Other;
 
-            public PlayerImpl(PlayerIndex index, Level level, int health)
+            public PlayerImpl(PlayerIndex index, LevelDemo level, int health)
             {
                 _index = index;
                 _level = level;
