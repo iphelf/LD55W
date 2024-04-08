@@ -9,7 +9,6 @@ namespace Roulette.Scripts.Managers
     {
         private static bool _initialized;
         private static Configuration _configuration;
-        public static GameConfig Config => _configuration.gameConfig;
 
         #region (Anywhere)
 
@@ -25,7 +24,10 @@ namespace Roulette.Scripts.Managers
         public static void InitializeOnce(Configuration configuration)
         {
             if (_initialized) return;
+
             _configuration = configuration;
+            LevelManager.Reset(_configuration.gameConfig.levels);
+
             _initialized = true;
             Debug.Log("Initialized.");
         }
@@ -54,9 +56,14 @@ namespace Roulette.Scripts.Managers
 
         #region Level
 
-        public static void CompleteLevel()
+        public static void NewLevel()
         {
-            Dummy.PerformQuickTask("过关");
+            Dummy.PerformQuickTask("新的关卡");
+        }
+
+        public static void OpenGameOver()
+        {
+            Dummy.PerformQuickTask("游戏结束");
         }
 
         public static void QuitLevelAndOpenTitle()
