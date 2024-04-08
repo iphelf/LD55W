@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -48,13 +47,13 @@ namespace Roulette.Scripts.SceneCtrls
             LevelManager.CompleteLevel();
         }
 
-        private async Awaitable ShowLevelState()
+        private void ShowLevelState()
         {
             string levelState =
                 $"Status: P1={_presentation.Info.Health(PlayerIndex.P1)}, " +
                 $"P2={_presentation.Info.Health(PlayerIndex.P2)}, " +
                 $"Bullets={_presentation.Info.BulletCount}.";
-            await Output(levelState);
+            Output(levelState);
         }
 
         private Awaitable<string> RequireInput(Predicate<string> validator = null)
@@ -70,37 +69,26 @@ namespace Roulette.Scripts.SceneCtrls
 
         public void SubmitInput()
         {
-            StartCoroutine(SubmitInputRoutine());
-        }
-
-        private IEnumerator SubmitInputRoutine()
-        {
             string input = inputField.text;
 
-            bool isInputOk = false;
-            yield return ProcessInput(input, result => isInputOk = result);
+            bool isInputOk = ProcessInput(input, result => isInputOk = result);
 
             if (input.Length == 0 || !isInputOk)
             {
                 inputField.ActivateInputField();
-                yield break;
+                return;
             }
 
             inputField.text = String.Empty;
             inputField.ActivateInputField();
         }
 
-        private bool _processingInput;
-
-        private async Awaitable<bool> ProcessInput(string input, Action<bool> handleResult = null)
+        private bool ProcessInput(string input, Action<bool> handleResult = null)
         {
-            if (_processingInput) return false;
-
-            _processingInput = true;
             bool result;
             if (input[0] == 's')
             {
-                await ShowLevelState();
+                ShowLevelState();
                 result = true;
             }
             else if (_appendingInput != null && (_appendingInputValidator == null || _appendingInputValidator(input)))
@@ -114,24 +102,28 @@ namespace Roulette.Scripts.SceneCtrls
             else
                 result = false;
 
-            _processingInput = false;
             handleResult?.Invoke(result);
             return result;
         }
 
-        private async Awaitable Output(string output)
+        private void Output(string output)
         {
             GameObject record = Instantiate(recordPrefab, recordList);
             record.transform.SetAsFirstSibling();
             var recordText = record.GetComponent<TMP_Text>();
             recordText.text = output;
             LayoutRebuilder.ForceRebuildLayoutImmediate(record.transform as RectTransform);
+        }
+
+        private async Awaitable OutputAsync(string output)
+        {
+            Output(output);
             await Awaitable.WaitForSecondsAsync(1f);
         }
 
         private async Awaitable OutputPlacingCard(PlayerIndex playerIndex, ItemType newCard, int index)
         {
-            await Output($"{playerIndex} puts {newCard} to {index}-th item slot.");
+            await OutputAsync($"{playerIndex} puts {newCard} to {index}-th item slot.");
         }
 
         private async Awaitable OutputAction(PlayerIndex playerIndex, SortedDictionary<int, ItemType> items,
@@ -140,12 +132,12 @@ namespace Roulette.Scripts.SceneCtrls
             switch (action)
             {
                 case PlayerFiresGun playerFiresGun:
-                    await Output(playerFiresGun.Target == playerIndex
+                    await OutputAsync(playerFiresGun.Target == playerIndex
                         ? $"{playerIndex} fires himself/herself."
                         : $"{playerIndex} fires the other player.");
                     break;
                 case PlayerUsesItem playerUsesItem:
-                    await Output($"{playerIndex} uses item {items[playerUsesItem.ItemIndex]}.");
+                    await OutputAsync($"{playerIndex} uses item {items[playerUsesItem.ItemIndex]}.");
                     break;
             }
         }
@@ -184,7 +176,7 @@ namespace Roulette.Scripts.SceneCtrls
 
             public override async Awaitable<PlayerAction> ProducePlayerAction(SortedDictionary<int, ItemType> items)
             {
-                await _ctrl.Output($"Host: Speak thy wish, {PlayerIndex}. (Input hint is given to the right)");
+                await _ctrl.OutputAsync($"Host: Speak thy wish, {PlayerIndex}. (Input hint is given to the right)");
                 string input = await _ctrl.RequireInput(input =>
                 {
                     var action = ParseAction(PlayerIndex, items, input);
@@ -201,8 +193,8 @@ namespace Roulette.Scripts.SceneCtrls
             public override async Awaitable<int> PlaceCard(SortedDictionary<int, ItemType> existingCards,
                 ItemType newCard)
             {
-                await _ctrl.Output($"Host: {PlayerIndex}, where do you want to place your new item {newCard}? " +
-                                   $"Note that, currently, you have {SerializeDict(existingCards)} in your hand.");
+                await _ctrl.OutputAsync($"Host: {PlayerIndex}, where do you want to place your new item {newCard}? " +
+                                        $"Note that, currently, you have {SerializeDict(existingCards)} in your hand.");
                 string input = await _ctrl.RequireInput(input =>
                 {
                     int index = int.Parse(input);
@@ -239,7 +231,7 @@ namespace Roulette.Scripts.SceneCtrls
 
             public override async Awaitable<PlayerAction> ProducePlayerAction(SortedDictionary<int, ItemType> items)
             {
-                await _ctrl.Output($"{PlayerIndex} thinks for a while.");
+                await _ctrl.OutputAsync($"{PlayerIndex} thinks for a while.");
                 var action = await base.ProducePlayerAction(items);
                 await _ctrl.OutputAction(PlayerIndex, items, action);
                 return action;
@@ -262,37 +254,37 @@ namespace Roulette.Scripts.SceneCtrls
 
             public override async Awaitable PlayCeremonyOnLevelBegin()
             {
-                await _ctrl.Output("# A new level begins.");
+                await _ctrl.OutputAsync("# A new level begins.");
                 await Noop();
             }
 
             public override async Awaitable PlayCeremonyOnRoundBegin()
             {
-                await _ctrl.Output("## A new round begins.");
+                await _ctrl.OutputAsync("## A new round begins.");
                 await Noop();
             }
 
             public override async Awaitable PrepareBombsForNewRound(int count)
             {
-                await _ctrl.Output($"Host: {count} bombs are in queue!");
+                await _ctrl.OutputAsync($"Host: {count} bombs are in queue!");
                 await Noop();
             }
 
             public override async Awaitable DrawCardFromDeck(PlayerIndex playerIndex, ItemType card)
             {
-                await _ctrl.Output($"{playerIndex} draws item {card}.");
+                await _ctrl.OutputAsync($"{playerIndex} draws item {card}.");
                 await Noop();
             }
 
             public override async Awaitable PlayCeremonyOnTurnBegin(PlayerIndex playerIndex)
             {
-                await _ctrl.Output($"### {playerIndex}'s turn begins");
+                await _ctrl.OutputAsync($"### {playerIndex}'s turn begins");
                 await Noop();
             }
 
             public override async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex, BulletQueue bulletQueue)
             {
-                await _ctrl.Output("Host: A new bullet has been loaded, either live or blank.");
+                await _ctrl.OutputAsync("Host: A new bullet has been loaded, either live or blank.");
                 await Noop();
             }
 
@@ -302,15 +294,15 @@ namespace Roulette.Scripts.SceneCtrls
                 switch (itemEffect)
                 {
                     case EffectOfMagnifyingGlass effectOfMagnifyingGlass:
-                        await _ctrl.Output($"{playerIndex} sees {effectOfMagnifyingGlass.IsReal}.");
+                        await _ctrl.OutputAsync($"{playerIndex} sees {effectOfMagnifyingGlass.IsReal}.");
                         break;
                     case EffectOfHandCuff:
                         onHit?.Invoke();
-                        await _ctrl.Output($"{playerIndex.Other()} is handcuffed by {playerIndex}.");
+                        await _ctrl.OutputAsync($"{playerIndex.Other()} is handcuffed by {playerIndex}.");
                         break;
                 }
 
-                await _ctrl.Output($"The {itemIndex}-th item slot of {playerIndex} has been freed.");
+                await _ctrl.OutputAsync($"The {itemIndex}-th item slot of {playerIndex} has been freed.");
                 await Noop();
             }
 
@@ -320,10 +312,10 @@ namespace Roulette.Scripts.SceneCtrls
                 if (isReal)
                 {
                     onHit();
-                    await _ctrl.Output($"{target} gets shot by {instigator}.");
+                    await _ctrl.OutputAsync($"{target} gets shot by {instigator}.");
                 }
                 else
-                    await _ctrl.Output(
+                    await _ctrl.OutputAsync(
                         $"{target} does not get shot by {instigator}, because the loaded bullet was blank.");
 
                 await Noop();
@@ -331,19 +323,19 @@ namespace Roulette.Scripts.SceneCtrls
 
             public override async Awaitable PlayCeremonyOnTurnEnd(PlayerIndex playerIndex)
             {
-                await _ctrl.Output($"### {playerIndex}'s turn ends.");
+                await _ctrl.OutputAsync($"### {playerIndex}'s turn ends.");
                 await Noop();
             }
 
             public override async Awaitable PlayCeremonyOnRoundEnd()
             {
-                await _ctrl.Output("## The last round ends.");
+                await _ctrl.OutputAsync("## The last round ends.");
                 await Noop();
             }
 
             public override async Awaitable PlayCeremonyOnLevelEnd(PlayerIndex winner)
             {
-                await _ctrl.Output(
+                await _ctrl.OutputAsync(
                     $"# The level completes. And the winner is {winner}. Game over will be shown in 5 seconds.");
                 await Awaitable.WaitForSecondsAsync(5.0f);
                 _ctrl.OnLevelOver();
