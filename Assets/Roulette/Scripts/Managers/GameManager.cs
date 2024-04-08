@@ -1,4 +1,5 @@
-﻿using Roulette.Scripts.General;
+﻿using Roulette.Scripts.Data;
+using Roulette.Scripts.General;
 using UnityEngine;
 
 namespace Roulette.Scripts.Managers
@@ -6,7 +7,9 @@ namespace Roulette.Scripts.Managers
     /// 宏观管理游戏全流程
     public class GameManager : MonoBehaviour
     {
-        private static bool _launched;
+        private static bool _initialized;
+        private static Configuration _configuration;
+        public static GameConfig Config => _configuration.gameConfig;
 
         #region (Anywhere)
 
@@ -19,11 +22,12 @@ namespace Roulette.Scripts.Managers
 
         #region Title
 
-        public static void OnGameLaunchedOnce()
+        public static void InitializeOnce(Configuration configuration)
         {
-            if (_launched) return;
-            _launched = true;
-            // Initialization
+            if (_initialized) return;
+            _configuration = configuration;
+            _initialized = true;
+            Debug.Log("Initialized.");
         }
 
         public static void StartGame()

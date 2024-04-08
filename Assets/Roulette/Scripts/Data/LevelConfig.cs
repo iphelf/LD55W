@@ -7,6 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace Roulette.Scripts.Data
 {
+    /// 单个关卡的配置
     [CreateAssetMenu(menuName = "Scriptable Object/Level Config", fileName = "level")]
     public class LevelConfig : ScriptableObject
     {
