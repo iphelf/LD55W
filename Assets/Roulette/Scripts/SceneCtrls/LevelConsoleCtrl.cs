@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,9 @@ namespace Roulette.Scripts.SceneCtrls
         [SerializeField] private TMP_InputField inputField;
 
         private Presentation _presentation;
+        [SerializeField] private bool p1IsAI;
         private PlayerInput _player1Input;
+        [SerializeField] private bool p2IsAI = true;
         private PlayerInput _player2Input;
         private AwaitableCompletionSource<string> _appendingInput;
         private Predicate<string> _appendingInputValidator;
@@ -27,11 +30,14 @@ namespace Roulette.Scripts.SceneCtrls
         {
             _presentation = new Presentation(this);
 
-            // _player1Input = new ConsoleHumanPlayerInput(_presentation, PlayerIndex.P1, this);
-            _player1Input = new ConsoleAIPlayerInput(_presentation, PlayerIndex.P1, this);
+            _player1Input = p1IsAI
+                ? new ConsoleAIPlayerInput(_presentation, PlayerIndex.P1, this)
+                : new ConsoleHumanPlayerInput(_presentation, PlayerIndex.P1, this);
             _presentation.BindPlayerInput(PlayerIndex.P1, _player1Input);
 
-            _player2Input = new ConsoleAIPlayerInput(_presentation, PlayerIndex.P2, this);
+            _player2Input = p2IsAI
+                ? new ConsoleAIPlayerInput(_presentation, PlayerIndex.P2, this)
+                : new ConsoleHumanPlayerInput(_presentation, PlayerIndex.P2, this);
             _presentation.BindPlayerInput(PlayerIndex.P2, _player2Input);
 
             await LevelDriver.Drive(LevelManager.Current, _presentation);
@@ -62,37 +68,55 @@ namespace Roulette.Scripts.SceneCtrls
             return _appendingInput.Awaitable;
         }
 
-        public async Awaitable SubmitInput()
+        public void SubmitInput()
+        {
+            StartCoroutine(SubmitInputRoutine());
+        }
+
+        private IEnumerator SubmitInputRoutine()
         {
             string input = inputField.text;
-            if (input.Length == 0 || !await ProcessInput(input))
+
+            bool isInputOk = false;
+            yield return ProcessInput(input, result => isInputOk = result);
+
+            if (input.Length == 0 || !isInputOk)
             {
                 inputField.ActivateInputField();
-                return;
+                yield break;
             }
 
             inputField.text = String.Empty;
             inputField.ActivateInputField();
         }
 
-        private async Awaitable<bool> ProcessInput(string input)
+        private bool _processingInput;
+
+        private async Awaitable<bool> ProcessInput(string input, Action<bool> handleResult = null)
         {
+            if (_processingInput) return false;
+
+            _processingInput = true;
+            bool result;
             if (input[0] == 's')
             {
                 await ShowLevelState();
-                return true;
+                result = true;
             }
-
-            if (_appendingInput != null && (_appendingInputValidator == null || _appendingInputValidator(input)))
+            else if (_appendingInput != null && (_appendingInputValidator == null || _appendingInputValidator(input)))
             {
                 var appendingInput = _appendingInput;
                 _appendingInput = null;
                 _appendingInputValidator = null;
                 appendingInput.SetResult(input);
-                return true;
+                result = true;
             }
+            else
+                result = false;
 
-            return false;
+            _processingInput = false;
+            handleResult?.Invoke(result);
+            return result;
         }
 
         private async Awaitable Output(string output)
