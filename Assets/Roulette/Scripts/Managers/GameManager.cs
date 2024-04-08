@@ -12,16 +12,7 @@ namespace Roulette.Scripts.Managers
 
         #region (Anywhere)
 
-        public static void QuitGame()
-        {
-            Application.Quit();
-        }
-
-        #endregion
-
-        #region Title
-
-        public static void InitializeOnce(Configuration configuration)
+        public static void InitializeGameOnce(Configuration configuration)
         {
             if (_initialized) return;
 
@@ -31,6 +22,15 @@ namespace Roulette.Scripts.Managers
             _initialized = true;
             Debug.Log("Initialized.");
         }
+
+        public static void QuitGame()
+        {
+            Application.Quit();
+        }
+
+        #endregion
+
+        #region Title
 
         public static void StartGame()
         {
