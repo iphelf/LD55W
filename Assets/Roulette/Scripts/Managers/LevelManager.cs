@@ -1,48 +1,7 @@
-﻿using Roulette.Scripts.Data;
-
-namespace Roulette.Scripts.Managers
+﻿namespace Roulette.Scripts.Managers
 {
-    public class LevelDemo
-    {
-        public LevelDemo(LevelConfig config)
-        {
-        }
-    }
-
+    /// 管理多关卡流程
     public class LevelManager
     {
-        public static LevelDemo Current => _instance._current;
-        public static void InitializeOnce(LevelConfig config) => _instance ??= new LevelManager(config);
-
-        public static bool SwitchToNext()
-        {
-            return _instance.SwitchToNextLevel();
-        }
-
-        private static LevelManager _instance;
-
-        private LevelDemo _current;
-        private readonly LevelConfig _config;
-        private int _levelCount = 2;
-
-        private LevelManager(LevelConfig config)
-        {
-            _config = config;
-        }
-
-        private bool SwitchToNextLevel()
-        {
-            --_levelCount;
-            if (_levelCount <= 0)
-            {
-                _current = null;
-                return false;
-            }
-            else
-            {
-                _current = new LevelDemo(_config);
-                return true;
-            }
-        }
     }
 }

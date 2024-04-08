@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Roulette.Scripts.Managers
 {
     /// 宏观管理游戏全流程
-    public class GameManager : MonoBehaviour
+    public static class GameManager
     {
         private static bool _initialized;
         private static Configuration _configuration;
