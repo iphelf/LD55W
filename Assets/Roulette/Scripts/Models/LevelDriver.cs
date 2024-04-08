@@ -77,6 +77,8 @@ namespace Roulette.Scripts.Models
             _data.Round.Turn = PlayerIndex.P1;
             do await NewTurn(_data.Round.Turn);
             while (!IsLevelOver() && !AreBombsExhausted());
+
+            await _presentation.PlayCeremonyOnRoundEnd();
         }
 
         private async Awaitable NewTurn(PlayerIndex playerIndex)

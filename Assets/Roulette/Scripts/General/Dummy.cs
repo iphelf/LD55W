@@ -1,10 +1,16 @@
 ﻿using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Roulette.Scripts.General
 {
     public static class Dummy
     {
+        public static async Awaitable NothingButAwaitable()
+        {
+            await Task.CompletedTask;
+        }
+
         public static void PerformQuickTask(string description,
             [CallerMemberName] string memberName = "")
         {

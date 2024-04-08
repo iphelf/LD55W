@@ -9,10 +9,22 @@ namespace Roulette.Scripts.Models
     public abstract class LevelPresentation
     {
         public LevelInfo Info;
+        private PlayerInput _placeholderP1;
+        private PlayerInput _placeholderP2;
+
+        private PlayerInput PlaceholderPlayer(PlayerIndex playerIndex)
+            => playerIndex switch
+            {
+                PlayerIndex.P1 => _placeholderP1,
+                PlayerIndex.P2 => _placeholderP2,
+                _ => null,
+            };
 
         public void InitializeByDriver(LevelInfo info)
         {
             Info = info;
+            _placeholderP1 = new PlaceholderPlayerInput(info, PlayerIndex.P1);
+            _placeholderP2 = new PlaceholderPlayerInput(info, PlayerIndex.P2);
         }
 
         public virtual async Awaitable PlayCeremonyOnLevelBegin()
@@ -33,10 +45,8 @@ namespace Roulette.Scripts.Models
             ItemType newCard)
         {
             await Dummy.PerformTask("将翻出的牌置入手牌或丢弃");
-            for (int i = 0; i < Info.CardCapacity; ++i)
-                if (!existingCards.ContainsKey(i))
-                    return i;
-            return -1;
+            int position = await PlaceholderPlayer(playerIndex).PlaceCard(existingCards, newCard);
+            return position;
         }
 
         public virtual async Awaitable PlayCeremonyOnTurnBegin(PlayerIndex playerIndex)
@@ -48,14 +58,15 @@ namespace Roulette.Scripts.Models
         public virtual async Awaitable<PlayerAction> WaitForPlayerAction(
             PlayerIndex playerIndex, SortedDictionary<int, ItemType> items)
         {
-            await Dummy.PerformTask("等待玩家行动"); // TODO
-            return new PlayerFiresGun(playerIndex.Other());
+            await Dummy.PerformTask("等待玩家行动");
+            var playerAction = await PlaceholderPlayer(playerIndex).ProducePlayerAction(items);
+            return playerAction;
         }
 
         public virtual async Awaitable ConsumeCardAndPlayEffect(
             PlayerIndex playerIndex, int itemIndex, ItemEffect itemEffect,
             Action onHit = null)
-            => await Dummy.PerformTask("展示道具生效时的表现"); // TODO
+            => await Dummy.PerformTask("展示道具生效时的表现");
 
         public virtual async Awaitable PlayBombEffect(
             PlayerIndex instigator, PlayerIndex target, bool isReal,
