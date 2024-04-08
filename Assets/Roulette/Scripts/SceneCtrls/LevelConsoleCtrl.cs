@@ -18,10 +18,7 @@ namespace Roulette.Scripts.SceneCtrls
         [SerializeField] private TMP_InputField inputField;
         [SerializeField] private LevelConfig levelConfig;
 
-        private LevelDemo _level;
-        private int _levelStep;
-
-        private LevelConsolePresentation _presentation;
+        private Presentation _presentation;
         private AwaitableCompletionSource<string> _appendingInput;
         private Predicate<string> _appendingInputValidator;
 
@@ -38,7 +35,7 @@ namespace Roulette.Scripts.SceneCtrls
             }
             else
             {
-                _presentation = new LevelConsolePresentation(this);
+                _presentation = new Presentation(this);
                 await LevelDriver.Drive(levelConfig, _presentation);
                 _presentation = null;
             }
@@ -112,11 +109,11 @@ namespace Roulette.Scripts.SceneCtrls
             LayoutRebuilder.ForceRebuildLayoutImmediate(record.transform as RectTransform);
         }
 
-        private class LevelConsolePresentation : LevelPresentation
+        private class Presentation : LevelPresentation
         {
             private readonly LevelConsoleCtrl _ctrl;
 
-            public LevelConsolePresentation(LevelConsoleCtrl ctrl)
+            public Presentation(LevelConsoleCtrl ctrl)
             {
                 _ctrl = ctrl;
             }
