@@ -1,14 +1,20 @@
 using Roulette.Scripts.Managers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Roulette.Scripts.SceneCtrls
 {
     public class TitleCtrl : MonoBehaviour
     {
-        public void StartGame() => GameManager.StartGame();
+        [SerializeField] private Button startButton;
+        [SerializeField] private Button creditsButton;
+        [SerializeField] private Button quitButton;
 
-        public void OpenCredits() => GameManager.OpenCredits();
-
-        public void QuitGame() => GameManager.QuitGame();
+        private void Start()
+        {
+            startButton.onClick.AddListener(GameManager.StartGame);
+            creditsButton.onClick.AddListener(GameManager.OpenCredits);
+            quitButton.onClick.AddListener(GameManager.QuitGame);
+        }
     }
 }

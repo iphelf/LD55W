@@ -442,19 +442,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 358246803}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 397555230}
-        m_TargetAssemblyTypeName: Roulette.Scripts.SceneCtrls.TitleCtrl, Assembly-CSharp
-        m_MethodName: QuitGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &358246803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -537,6 +525,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1772428a47df9b543b2f7cc0c2a275ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startButton: {fileID: 565807161}
+  creditsButton: {fileID: 1243180360}
+  quitButton: {fileID: 358246802}
 --- !u!1 &513858172
 GameObject:
   m_ObjectHideFlags: 0
@@ -687,19 +678,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 565807162}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 397555230}
-        m_TargetAssemblyTypeName: Roulette.Scripts.SceneCtrls.TitleCtrl, Assembly-CSharp
-        m_MethodName: StartGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &565807162
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1048,19 +1027,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1243180361}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 397555230}
-        m_TargetAssemblyTypeName: Roulette.Scripts.SceneCtrls.TitleCtrl, Assembly-CSharp
-        m_MethodName: OpenCredits
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1243180361
 MonoBehaviour:
   m_ObjectHideFlags: 0
