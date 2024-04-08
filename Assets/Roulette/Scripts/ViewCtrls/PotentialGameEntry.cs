@@ -11,7 +11,7 @@ namespace Roulette.Scripts.ViewCtrls
 
         private void Awake()
         {
-            GameManager.InitializeOnce(configuration);
+            GameManager.InitializeGameOnce(configuration);
         }
     }
 }
