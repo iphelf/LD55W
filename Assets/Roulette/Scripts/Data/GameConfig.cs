@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Roulette.Scripts.General;
 using UnityEngine;
 
 namespace Roulette.Scripts.Data
@@ -8,5 +9,10 @@ namespace Roulette.Scripts.Data
     public class GameConfig : ScriptableObject
     {
         public List<LevelConfig> levels = new();
+
+        [Header("Scenes"), Scene] public string titleScene = "Title";
+        [Scene] public string creditsScene = "Credits";
+        [Scene] public string levelScene = "Level";
+        [Scene] public string gameOverScene = "GameOver";
     }
 }

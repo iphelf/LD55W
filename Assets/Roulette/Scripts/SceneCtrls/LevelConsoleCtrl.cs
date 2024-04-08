@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Roulette.Scripts.Data;
 using Roulette.Scripts.General;
+using Roulette.Scripts.Managers;
 using Roulette.Scripts.Models;
 using TMPro;
 using UnityEngine;
@@ -16,7 +16,6 @@ namespace Roulette.Scripts.SceneCtrls
         [SerializeField] private GameObject recordPrefab;
         [SerializeField] private Transform recordList;
         [SerializeField] private TMP_InputField inputField;
-        [SerializeField] private LevelConfig levelConfig;
 
         private Presentation _presentation;
         private AwaitableCompletionSource<string> _appendingInput;
@@ -24,21 +23,13 @@ namespace Roulette.Scripts.SceneCtrls
 
         private async void Start()
         {
-            await NewLevel();
+            _presentation = new Presentation(this);
+            await LevelDriver.Drive(LevelManager.Current, _presentation);
         }
 
-        private async Awaitable NewLevel()
+        private void OnLevelOver()
         {
-            if (_presentation != null)
-            {
-                Output("Current level must be completed before a new level may be created.");
-            }
-            else
-            {
-                _presentation = new Presentation(this);
-                await LevelDriver.Drive(levelConfig, _presentation);
-                _presentation = null;
-            }
+            LevelManager.CompleteLevel();
         }
 
         private void ShowLevelState()
@@ -61,10 +52,10 @@ namespace Roulette.Scripts.SceneCtrls
             return _appendingInput.Awaitable;
         }
 
-        public async void SubmitInput()
+        public void SubmitInput()
         {
             string input = inputField.text;
-            if (input.Length == 0 || !await ProcessInput(input))
+            if (input.Length == 0 || !ProcessInput(input))
             {
                 inputField.ActivateInputField();
                 return;
@@ -74,17 +65,11 @@ namespace Roulette.Scripts.SceneCtrls
             inputField.ActivateInputField();
         }
 
-        private async Awaitable<bool> ProcessInput(string input)
+        private bool ProcessInput(string input)
         {
             if (input[0] == 's')
             {
                 ShowLevelState();
-                return true;
-            }
-
-            if (input[0] == 'n')
-            {
-                await NewLevel();
                 return true;
             }
 
@@ -158,7 +143,7 @@ namespace Roulette.Scripts.SceneCtrls
                 string input = await _ctrl.RequireInput(input =>
                 {
                     int index = int.Parse(input);
-                    if (index < 0 || index >= Info.CardCapacity) return false;
+                    if (index >= Info.CardCapacity) return false;
                     if (existingCards.ContainsKey(index)) return false;
                     return true;
                 });
@@ -270,7 +255,8 @@ namespace Roulette.Scripts.SceneCtrls
             public override async Awaitable PlayCeremonyOnLevelEnd(PlayerIndex winner)
             {
                 _ctrl.Output($"# The level completes. And the winner is {winner}.");
-                await Noop();
+                await Awaitable.WaitForSecondsAsync(2.0f);
+                _ctrl.OnLevelOver();
             }
         }
     }
