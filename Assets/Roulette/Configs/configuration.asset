@@ -13,3 +13,7 @@ MonoBehaviour:
   m_Name: configuration
   m_EditorClassIdentifier: 
   gameConfig: {fileID: 11400000, guid: 14738c52289ad4a4c960440f937276f6, type: 2}
+  titleScene: Title
+  creditsScene: Credits
+  levelScene: Level
+  gameOverScene: GameOver

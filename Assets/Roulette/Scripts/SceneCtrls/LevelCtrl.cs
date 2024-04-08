@@ -40,7 +40,7 @@ namespace Roulette.Scripts.SceneCtrls
 
             public override async Awaitable PlayCeremonyOnLevelBegin()
             {
-                await _ctrl.bannerCtrl.Present($"Level {LevelManager.LevelIndex} Begins!");
+                await _ctrl.bannerCtrl.Present($"Level {LevelManager.LevelIndex} begins");
             }
 
             public override async Awaitable PlayCeremonyOnRoundBegin()
@@ -66,7 +66,7 @@ namespace Roulette.Scripts.SceneCtrls
 
             public override async Awaitable PlayCeremonyOnTurnBegin(PlayerIndex playerIndex)
             {
-                await base.PlayCeremonyOnTurnBegin(playerIndex);
+                await _ctrl.bannerCtrl.Present($"{playerIndex}'s turn");
             }
 
             public override async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex, BulletQueue bulletQueue)
@@ -104,7 +104,7 @@ namespace Roulette.Scripts.SceneCtrls
 
             public override async Awaitable PlayCeremonyOnLevelEnd(PlayerIndex winner)
             {
-                await _ctrl.bannerCtrl.Present($"Level {LevelManager.LevelIndex} Completes!");
+                await _ctrl.bannerCtrl.Present($"Level {LevelManager.LevelIndex} completes");
                 _ctrl.OnLevelOver();
             }
         }

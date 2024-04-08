@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Roulette.Scripts.SceneCtrls
 {
-    public class GameoverCtrl : MonoBehaviour
+    public class GameOverCtrl : MonoBehaviour
     {
         [SerializeField] private Button restartButton;
         [SerializeField] private Button menuButton;

@@ -1,6 +1,6 @@
 ﻿using Roulette.Scripts.Data;
-using Roulette.Scripts.General;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Roulette.Scripts.Managers
 {
@@ -34,12 +34,13 @@ namespace Roulette.Scripts.Managers
 
         public static void StartGame()
         {
-            Dummy.PerformQuickTask("开始新游戏");
+            LevelManager.Reset(_configuration.gameConfig.levels);
+            SceneManager.LoadScene(_configuration.levelScene);
         }
 
         public static void OpenCredits()
         {
-            Dummy.PerformQuickTask("打开Credits界面");
+            SceneManager.LoadScene(_configuration.creditsScene);
         }
 
         #endregion
@@ -48,7 +49,7 @@ namespace Roulette.Scripts.Managers
 
         public static void CloseCreditsAndOpenTitle()
         {
-            Dummy.PerformQuickTask("关闭Credits界面并回到标题界面");
+            SceneManager.LoadScene(_configuration.titleScene);
         }
 
         #endregion
@@ -58,22 +59,22 @@ namespace Roulette.Scripts.Managers
 
         public static void NewLevel()
         {
-            Dummy.PerformQuickTask("新的关卡");
+            SceneManager.LoadScene(_configuration.levelScene);
         }
 
         public static void OpenGameOver()
         {
-            Dummy.PerformQuickTask("游戏结束");
+            SceneManager.LoadScene(_configuration.gameOverScene);
         }
 
         public static void QuitLevelAndOpenTitle()
         {
-            Dummy.PerformQuickTask("退出关卡并回到标题界面");
+            SceneManager.LoadScene(_configuration.titleScene);
         }
 
         public static void QuitLevelAndRestartGame()
         {
-            Dummy.PerformQuickTask("退出关卡并重新开始游戏");
+            StartGame();
         }
 
         #endregion
@@ -82,12 +83,12 @@ namespace Roulette.Scripts.Managers
 
         public static void ReturnToTitle()
         {
-            Dummy.PerformQuickTask("回到标题界面");
+            SceneManager.LoadScene(_configuration.titleScene);
         }
 
         public static void RestartGame()
         {
-            Dummy.PerformQuickTask("重新开始游戏");
+            StartGame();
         }
 
         #endregion
