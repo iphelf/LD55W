@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using Roulette.Scripts.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,20 +16,20 @@ namespace Roulette.Scripts.SceneCtrls
             menuButton.onClick.AddListener(ReturnToMenu);
             quitButton.onClick.AddListener(QuitGame);
         }
+
         void RestartGame()
-        { 
-            Debug.Log("重新开始游戏");
-            Application.Quit();
+        {
+            GameManager.RestartGame();
         }
+
         void ReturnToMenu()
-        { 
-            Debug.Log("返回主菜单");
-            Application.Quit();
+        {
+            GameManager.ReturnToTitle();
         }
+
         void QuitGame()
-        { 
-            Debug.Log("退出游戏");
-            Application.Quit();
+        {
+            GameManager.QuitGame();
         }
     }
 }

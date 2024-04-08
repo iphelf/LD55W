@@ -339,8 +339,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c74bc880d6786544bd08c4918d1c3f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  game: {fileID: 1291616583}
-  levelConfig: {fileID: 11400000, guid: 9bc0b94df3347b34ebb8804805e71a85, type: 2}
+  bombManager: {fileID: 9740114}
+  cardManager: {fileID: 1455057287}
+  actionsCtrl: {fileID: 8241555864640681118}
+  statusCtrl: {fileID: 3692761506462523213}
+  p1BuffsCtrl: {fileID: 8400230861146872715}
+  p2BuffsCtrl: {fileID: 4099970590869985842}
 --- !u!1 &406157314
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,56 +557,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8077359336682139637, guid: b63baf9064ea67a4a87e7e8d4af7bf4f, type: 3}
   m_PrefabInstance: {fileID: 3692761506462523212}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1291616581
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1291616582}
-  - component: {fileID: 1291616583}
-  m_Layer: 0
-  m_Name: Manager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1291616582
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1291616581}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1291616583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1291616581}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a888f145a854880bfb1ec37a06c460c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bombManager: {fileID: 9740114}
-  cardManager: {fileID: 1455057287}
-  actionsCtrl: {fileID: 8241555864640681118}
-  statusCtrl: {fileID: 3692761506462523213}
-  p1BuffsCtrl: {fileID: 8400230861146872715}
-  p2BuffsCtrl: {fileID: 4099970590869985842}
 --- !u!4 &1455057286 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1372390908609197106, guid: 7673646de124d9447bfec1d2669ccd76, type: 3}
@@ -1399,7 +1353,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 255328758}
   - {fileID: 374143420}
-  - {fileID: 1291616582}
   - {fileID: 406157316}
   - {fileID: 1945365143}
   - {fileID: 461483461}

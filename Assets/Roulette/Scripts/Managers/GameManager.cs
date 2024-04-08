@@ -1,15 +1,84 @@
-﻿using Roulette.Scripts.ViewCtrls;
+﻿using Roulette.Scripts.General;
 using UnityEngine;
 
 namespace Roulette.Scripts.Managers
 {
+    /// 宏观管理游戏全流程
     public class GameManager : MonoBehaviour
     {
-        public BombManager bombManager;
-        public CardManager cardManager;
-        public ActionsCtrl actionsCtrl;
-        public StatusCtrl statusCtrl;
-        public BuffsCtrl p1BuffsCtrl;
-        public BuffsCtrl p2BuffsCtrl;
+        private static bool _launched;
+
+        #region (Anywhere)
+
+        public static void QuitGame()
+        {
+            Application.Quit();
+        }
+
+        #endregion
+
+        #region Title
+
+        public static void OnGameLaunchedOnce()
+        {
+            if (_launched) return;
+            _launched = true;
+            // Initialization
+        }
+
+        public static void StartGame()
+        {
+            Dummy.PerformQuickTask("开始新游戏");
+        }
+
+        public static void OpenCredits()
+        {
+            Dummy.PerformQuickTask("打开Credits界面");
+        }
+
+        #endregion
+
+        #region Credits
+
+        public static void CloseCreditsAndOpenTitle()
+        {
+            Dummy.PerformQuickTask("关闭Credits界面并回到标题界面");
+        }
+
+        #endregion
+
+
+        #region Level
+
+        public static void CompleteLevel()
+        {
+            Dummy.PerformQuickTask("过关");
+        }
+
+        public static void QuitLevelAndOpenTitle()
+        {
+            Dummy.PerformQuickTask("退出关卡并回到标题界面");
+        }
+
+        public static void QuitLevelAndRestartGame()
+        {
+            Dummy.PerformQuickTask("退出关卡并重新开始游戏");
+        }
+
+        #endregion
+
+        #region Game Over
+
+        public static void ReturnToTitle()
+        {
+            Dummy.PerformQuickTask("回到标题界面");
+        }
+
+        public static void RestartGame()
+        {
+            Dummy.PerformQuickTask("重新开始游戏");
+        }
+
+        #endregion
     }
 }

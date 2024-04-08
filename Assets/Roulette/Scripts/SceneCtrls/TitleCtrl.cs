@@ -1,23 +1,16 @@
-using Roulette.Scripts.General;
+using Roulette.Scripts.Managers;
 using UnityEngine;
 
 namespace Roulette.Scripts.SceneCtrls
 {
     public class TitleCtrl : MonoBehaviour
     {
-        public void StartGame()
-        {
-            Dummy.PerformQuickTask("开始新游戏");
-        }
+        private void Start() => GameManager.OnGameLaunchedOnce();
 
-        public void OpenCredits()
-        {
-            Dummy.PerformQuickTask("打开Credits界面");
-        }
+        public void StartGame() => GameManager.StartGame();
 
-        public void QuitGame()
-        {
-            Application.Quit();
-        }
+        public void OpenCredits() => GameManager.OpenCredits();
+
+        public void QuitGame() => GameManager.QuitGame();
     }
 }

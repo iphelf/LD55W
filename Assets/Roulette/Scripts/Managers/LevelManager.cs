@@ -1,8 +1,14 @@
 ﻿using Roulette.Scripts.Data;
-using Roulette.Scripts.Models;
 
 namespace Roulette.Scripts.Managers
 {
+    public class LevelDemo
+    {
+        public LevelDemo(LevelConfig config)
+        {
+        }
+    }
+
     public class LevelManager
     {
         public static LevelDemo Current => _instance._current;
@@ -22,7 +28,6 @@ namespace Roulette.Scripts.Managers
         private LevelManager(LevelConfig config)
         {
             _config = config;
-            _current = new LevelDemo(config);
         }
 
         private bool SwitchToNextLevel()
