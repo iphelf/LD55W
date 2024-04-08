@@ -188,8 +188,8 @@ namespace Roulette.Scripts.Models
                 };
             }
 
-            public override int BulletCount => _driver._data.Round.BulletQueue.Count;
-            public override int CountRealBullets() => _driver._data.Round.BulletQueue.CountRealBullets();
+            public override int BulletCount => _driver._data.Round?.BulletQueue?.Count ?? 0;
+            public override int CountRealBullets() => _driver._data.Round?.BulletQueue?.CountRealBullets() ?? 0;
             public override LevelStep LevelStep => _driver._data.Step;
 
             private readonly LevelDriver _driver;

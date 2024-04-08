@@ -71,9 +71,7 @@ namespace Roulette.Scripts.SceneCtrls
         {
             string input = inputField.text;
 
-            bool isInputOk = ProcessInput(input, result => isInputOk = result);
-
-            if (input.Length == 0 || !isInputOk)
+            if (input.Length == 0 || !ProcessInput(input))
             {
                 inputField.ActivateInputField();
                 return;
@@ -83,7 +81,7 @@ namespace Roulette.Scripts.SceneCtrls
             inputField.ActivateInputField();
         }
 
-        private bool ProcessInput(string input, Action<bool> handleResult = null)
+        private bool ProcessInput(string input)
         {
             bool result;
             if (input[0] == 's')
@@ -102,7 +100,6 @@ namespace Roulette.Scripts.SceneCtrls
             else
                 result = false;
 
-            handleResult?.Invoke(result);
             return result;
         }
 
