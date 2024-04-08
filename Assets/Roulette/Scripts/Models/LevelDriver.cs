@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Roulette.Scripts.Data;
 using Roulette.Scripts.General;
+using Roulette.Scripts.Managers;
 using UnityEngine;
 
 namespace Roulette.Scripts.Models
@@ -32,6 +33,8 @@ namespace Roulette.Scripts.Models
         {
             _data.Player1 = new PlayerData { Health = _config.initialHealth };
             _data.Player2 = new PlayerData { Health = _config.initialHealth };
+            _data.Step = new LevelStep();
+            _data.Step.NewLevel(LevelManager.LevelIndex + 1);
 
             await _presentation.PlayCeremonyOnLevelBegin();
 
@@ -54,6 +57,7 @@ namespace Roulette.Scripts.Models
         private async Awaitable NewRound()
         {
             _data.Round = new RoundData();
+            _data.Step.NewRound();
 
             await _presentation.PlayCeremonyOnRoundBegin();
 
@@ -83,6 +87,8 @@ namespace Roulette.Scripts.Models
 
         private async Awaitable NewTurn(PlayerIndex playerIndex)
         {
+            _data.Step.NewTurn();
+
             await _presentation.PlayCeremonyOnTurnBegin(playerIndex);
 
             await _presentation.TakeBombForNewTurn(playerIndex, _data.Round.BulletQueue);
@@ -183,6 +189,8 @@ namespace Roulette.Scripts.Models
             }
 
             public override int BulletCount => _driver._data.Round.BulletQueue.Count;
+            public override int CountRealBullets() => _driver._data.Round.BulletQueue.CountRealBullets();
+            public override LevelStep LevelStep => _driver._data.Step;
 
             private readonly LevelDriver _driver;
 

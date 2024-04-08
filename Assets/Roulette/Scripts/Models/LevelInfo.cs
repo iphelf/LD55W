@@ -8,5 +8,7 @@
         public abstract ItemType Item(PlayerIndex playerIndex, int itemIndex);
         public abstract bool IsItemUsable(PlayerIndex playerIndex, ItemType item);
         public abstract int BulletCount { get; }
+        public abstract int CountRealBullets();
+        public abstract LevelStep LevelStep { get; }
     }
 }

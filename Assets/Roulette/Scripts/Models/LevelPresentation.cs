@@ -9,22 +9,35 @@ namespace Roulette.Scripts.Models
     public abstract class LevelPresentation
     {
         public LevelInfo Info;
-        private PlayerInput _placeholderP1;
-        private PlayerInput _placeholderP2;
+        private PlayerInput _player1Input;
+        private PlayerInput _player2Input;
 
-        private PlayerInput PlaceholderPlayer(PlayerIndex playerIndex)
+        private PlayerInput PlayerInput(PlayerIndex playerIndex)
             => playerIndex switch
             {
-                PlayerIndex.P1 => _placeholderP1,
-                PlayerIndex.P2 => _placeholderP2,
+                PlayerIndex.P1 => _player1Input,
+                PlayerIndex.P2 => _player2Input,
                 _ => null,
             };
 
         public void InitializeByDriver(LevelInfo info)
         {
             Info = info;
-            _placeholderP1 = new PlaceholderPlayerInput(info, PlayerIndex.P1);
-            _placeholderP2 = new PlaceholderPlayerInput(info, PlayerIndex.P2);
+            _player1Input ??= new PlaceholderPlayerInput(this, PlayerIndex.P2);
+            _player2Input ??= new PlaceholderPlayerInput(this, PlayerIndex.P2);
+        }
+
+        public void BindPlayerInput(PlayerIndex playerIndex, PlayerInput playerInput)
+        {
+            switch (playerIndex)
+            {
+                case PlayerIndex.P1:
+                    _player1Input = playerInput;
+                    break;
+                case PlayerIndex.P2:
+                    _player2Input = playerInput;
+                    break;
+            }
         }
 
         public virtual async Awaitable PlayCeremonyOnLevelBegin()
@@ -44,8 +57,7 @@ namespace Roulette.Scripts.Models
             SortedDictionary<int, ItemType> existingCards,
             ItemType newCard)
         {
-            await Dummy.PerformTask("将翻出的牌置入手牌或丢弃");
-            int position = await PlaceholderPlayer(playerIndex).PlaceCard(existingCards, newCard);
+            int position = await PlayerInput(playerIndex).PlaceCard(existingCards, newCard);
             return position;
         }
 
@@ -58,8 +70,7 @@ namespace Roulette.Scripts.Models
         public virtual async Awaitable<PlayerAction> WaitForPlayerAction(
             PlayerIndex playerIndex, SortedDictionary<int, ItemType> items)
         {
-            await Dummy.PerformTask("等待玩家行动");
-            var playerAction = await PlaceholderPlayer(playerIndex).ProducePlayerAction(items);
+            var playerAction = await PlayerInput(playerIndex).ProducePlayerAction(items);
             return playerAction;
         }
 

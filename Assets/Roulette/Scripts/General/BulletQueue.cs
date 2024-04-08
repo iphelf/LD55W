@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Roulette.Scripts.General
 {
@@ -20,5 +21,10 @@ namespace Roulette.Scripts.General
         }
 
         public int Count => _list.Count;
+
+        public int CountRealBullets()
+        {
+            return _list.Sum(isReal => isReal ? 1 : 0);
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace Roulette.Scripts.Models
         public PlayerData Player1;
         public PlayerData Player2;
         public RoundData Round;
+        public LevelStep Step;
     }
 
     public record PlayerData
