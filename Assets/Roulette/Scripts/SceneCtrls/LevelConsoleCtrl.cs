@@ -263,7 +263,7 @@ namespace Roulette.Scripts.SceneCtrls
 
             public override async Awaitable PrepareBombsForNewRound(int count)
             {
-                await _ctrl.OutputAsync($"Host: {count} bombs are in queue!");
+                await _ctrl.OutputAsync($"Host: {count} bullets are in roulette!");
                 await Noop();
             }
 
