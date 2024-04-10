@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 
 namespace Roulette.Scripts.Models
 {
-    // 获取关卡中的各种有用信息
+    /// 获取关卡中的各种有用信息
     public abstract class LevelInfo
     {
         public abstract int Health(PlayerIndex playerIndex);

@@ -1,0 +1,134 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+skinparam DefaultFontName Sarasa Gothic SC
+hide empty member
+
+abstract class LevelPresentation {
+-- 演出 --
++{abstract}PlayCeremonyOnLevelBegin()
++{abstract}PlayCeremonyOnRoundEnd()
++{abstract}PlayCeremonyOnTurnBegin()
++{abstract}PrepareBombsForNewRound()
++{abstract}DrawCardFromDeck()
++{abstract}AppendCard()
++{abstract}TakeBombForNewTurn()
+...
+-- 输入 --
++{abstract}WaitForPlayerAction()
+}
+
+class LevelDriver {
++{static}Drive(config, presentation)
+-NewLevel()
+-NewRound()
+-NewTurn()
+}
+LevelDriver o--> LevelPresentation
+
+@enduml
+
+
+@startuml
+'https://plantuml.com/class-diagram
+
+skinparam DefaultFontName Sarasa Gothic SC
+hide empty member
+
+class Driver {
++Drive(presentation)
+}
+Driver ..> Presentation
+
+abstract class Presentation
+
+namespace Console {
+class Controller
+Controller ..> Driver
+Controller ..> Console.Presentation
+class Presentation
+}
+Console.Presentation --|> Presentation
+
+namespace "(Graphical)" as Graphical {
+class Controller
+Controller ..> Driver
+Controller ..> Graphical.Presentation
+class Presentation
+}
+Graphical.Presentation --|> Presentation
+
+@enduml
+
+
+@startuml
+'https://plantuml.com/class-diagram
+
+skinparam DefaultFontName Sarasa Gothic SC
+hide empty member
+
+abstract class Presentation {
+WaitForPlayerAction()
+}
+
+Presentation o--> PlayerInput
+
+abstract class PlayerInput {
++{abstract}ProducePlayerAction(): Awaitable<PlayerAction>
+}
+
+class AutoPlayerInput {
++ProducePlayerAction()
+}
+AutoPlayerInput --|> PlayerInput
+
+class HumanPlayerInput {
++ProducePlayerAction()
+}
+HumanPlayerInput --|> PlayerInput
+HumanPlayerInput ..> Controller
+
+@enduml
+
+
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam DefaultFontName Sarasa Gothic SC
+autonumber
+
+actor Player
+
+Player -> Controller : Start
+Controller -> Driver : Drive
+Driver -> Driver : NewTurn
+Driver -> Presentation : WaitForPlayerAction
+Presentation -> PlayerInput : ProducePlayerAction
+
+PlayerInput -> Controller : RequireInput
+Controller --> PlayerInput : (CompletionSource<string>).Awaitable
+PlayerInput -> PlayerInput ++ : await (Awaitable<string>)
+
+Player -> Player : (A cup of tea)
+Player -> Controller : Submit(input)
+
+Controller -> Controller : (CompletionSource<string>).SetResult(input)
+'Controller --> PlayerInput : (await returns)
+rnote over PlayerInput: input = await (Awaitable<string>)
+deactivate PlayerInput
+PlayerInput --> PlayerInput : ParseInput(input)
+PlayerInput --> Presentation : PlayerAction
+Presentation --> Driver : PlayerAction
+Driver -> Driver : NewTurn
+
+
+@enduml
+
+
+@startuml
+'https://plantuml.com/class-diagram
+
+skinparam DefaultFontName Sarasa Gothic SC
+hide empty member
+
+@enduml

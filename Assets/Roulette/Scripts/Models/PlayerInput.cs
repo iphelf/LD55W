@@ -17,10 +17,12 @@ namespace Roulette.Scripts.Models
 
         public abstract Awaitable<PlayerAction> ProducePlayerAction(List<ItemType> items);
 
+        /// 仅AI可能需要override
         public virtual void AcknowledgeBombExplosion(bool exploded)
         {
         }
 
+        /// 仅AI可能需要override
         public virtual void AcknowledgeItemEffect(ItemEffect effect)
         {
         }

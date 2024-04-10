@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Roulette.Scripts.General;
 using Roulette.Scripts.Managers;
 using Roulette.Scripts.Models;
@@ -236,15 +235,9 @@ namespace Roulette.Scripts.SceneCtrls
                 _ctrl = ctrl;
             }
 
-            private async Awaitable Noop()
-            {
-                await Task.CompletedTask;
-            }
-
             public override async Awaitable PlayCeremonyOnLevelBegin()
             {
                 await _ctrl.OutputAsync("# A new level begins.");
-                await Noop();
             }
 
             public override async Awaitable AppendCard(PlayerIndex playerIndex, int existingCardCount, ItemType newCard)
