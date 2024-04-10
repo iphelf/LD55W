@@ -80,13 +80,13 @@ namespace Roulette.Scripts.SceneCtrls
                 return await base.WaitForPlayerAction(playerIndex, items);
             }
 
-            public override async Awaitable ConsumeCardAndPlayEffect(PlayerIndex playerIndex, int itemIndex,
+            protected override async Awaitable ConsumeCardAndPlayEffect(PlayerIndex playerIndex, int itemIndex,
                 ItemEffect itemEffect, Action onHit = null)
             {
                 await base.ConsumeCardAndPlayEffect(playerIndex, itemIndex, itemEffect, onHit);
             }
 
-            public override async Awaitable PlayBombEffect(PlayerIndex instigator, PlayerIndex target, bool isReal,
+            protected override async Awaitable PlayBombEffect(PlayerIndex instigator, PlayerIndex target, bool isReal,
                 Action onHit)
             {
                 await base.PlayBombEffect(instigator, target, isReal, onHit);

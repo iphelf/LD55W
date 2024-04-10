@@ -285,7 +285,7 @@ namespace Roulette.Scripts.SceneCtrls
                 await Noop();
             }
 
-            public override async Awaitable ConsumeCardAndPlayEffect(PlayerIndex playerIndex, int itemIndex,
+            protected override async Awaitable ConsumeCardAndPlayEffect(PlayerIndex playerIndex, int itemIndex,
                 ItemEffect itemEffect, Action onHit = null)
             {
                 switch (itemEffect)
@@ -303,7 +303,7 @@ namespace Roulette.Scripts.SceneCtrls
                 await Noop();
             }
 
-            public override async Awaitable PlayBombEffect(PlayerIndex instigator, PlayerIndex target, bool isReal,
+            protected override async Awaitable PlayBombEffect(PlayerIndex instigator, PlayerIndex target, bool isReal,
                 Action onHit)
             {
                 if (isReal)

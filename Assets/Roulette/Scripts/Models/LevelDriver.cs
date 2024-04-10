@@ -123,7 +123,7 @@ namespace Roulette.Scripts.Models
         {
             bool isReal = _data.Round.BulletQueue.Peek;
             _data.Round.BulletQueue.Pop();
-            await _presentation.PlayBombEffect(playerIndex, playerFiresGun.Target, isReal, () =>
+            await _presentation.AcknowledgeBombExplosion(playerIndex, playerFiresGun.Target, isReal, () =>
             {
                 if (isReal)
                     --Player(playerFiresGun.Target).Health;
@@ -153,7 +153,7 @@ namespace Roulette.Scripts.Models
             }
 
             player.Items.Remove(playerUsesItem.ItemIndex);
-            await _presentation.ConsumeCardAndPlayEffect(
+            await _presentation.AcknowledgeItemEffect(
                 playerIndex, playerUsesItem.ItemIndex, effect, onHit);
         }
 

@@ -74,12 +74,28 @@ namespace Roulette.Scripts.Models
             return playerAction;
         }
 
-        public virtual async Awaitable ConsumeCardAndPlayEffect(
+        public async Awaitable AcknowledgeItemEffect(
+            PlayerIndex playerIndex, int itemIndex, ItemEffect itemEffect,
+            Action onHit = null)
+        {
+            await ConsumeCardAndPlayEffect(playerIndex, itemIndex, itemEffect, onHit);
+            PlayerInput(playerIndex).AcknowledgeItemEffect(itemEffect);
+        }
+
+        protected virtual async Awaitable ConsumeCardAndPlayEffect(
             PlayerIndex playerIndex, int itemIndex, ItemEffect itemEffect,
             Action onHit = null)
             => await Dummy.PerformTask("展示道具生效时的表现");
 
-        public virtual async Awaitable PlayBombEffect(
+        public async Awaitable AcknowledgeBombExplosion(
+            PlayerIndex instigator, PlayerIndex target, bool isReal,
+            Action onHit)
+        {
+            await PlayBombEffect(instigator, target, isReal, onHit);
+            PlayerInput(instigator).AcknowledgeBombExplosion(isReal);
+        }
+
+        protected virtual async Awaitable PlayBombEffect(
             PlayerIndex instigator, PlayerIndex target, bool isReal,
             Action onHit)
         {
