@@ -15,17 +15,27 @@ namespace Roulette.Scripts.SceneCtrls
         [SerializeField] private GameObject recordPrefab;
         [SerializeField] private Transform recordList;
         [SerializeField] private TMP_InputField inputField;
+        [SerializeField] private Button continueButton;
 
         private Presentation _presentation;
         [SerializeField] private bool p1IsAI;
         private PlayerInput _player1Input;
         [SerializeField] private bool p2IsAI = true;
         private PlayerInput _player2Input;
+
         private AwaitableCompletionSource<string> _appendingInput;
         private Predicate<string> _appendingInputValidator;
+        private AwaitableCompletionSource _waitForContinue;
 
         private async void Start()
         {
+            continueButton.gameObject.SetActive(false);
+            continueButton.onClick.AddListener(() =>
+            {
+                _waitForContinue?.SetResult();
+                // continueButton.gameObject.SetActive(false);
+            });
+
             _presentation = new Presentation(this);
 
             _player1Input = p1IsAI
@@ -141,6 +151,13 @@ namespace Roulette.Scripts.SceneCtrls
             }
         }
 
+        private Awaitable RequireContinue()
+        {
+            _waitForContinue ??= new AwaitableCompletionSource();
+            continueButton.gameObject.SetActive(true);
+            return _waitForContinue.Awaitable;
+        }
+
         private class ConsoleHumanPlayerInput : PlayerInput
         {
             private readonly LevelConsoleCtrl _ctrl;
@@ -243,32 +260,27 @@ namespace Roulette.Scripts.SceneCtrls
             public override async Awaitable PlayCeremonyOnRoundBegin()
             {
                 await _ctrl.OutputAsync("## A new round begins.");
-                await Noop();
             }
 
             public override async Awaitable PrepareBombsForNewRound(int count)
             {
                 await _ctrl.OutputAsync($"Host: {count} bullets are in roulette! " +
                                         $"And {Info.CountRealBullets()} of them are live!");
-                await Noop();
             }
 
             public override async Awaitable DrawCardFromDeck(PlayerIndex playerIndex, ItemType card)
             {
                 await _ctrl.OutputAsync($"{playerIndex} draws item {card}.");
-                await Noop();
             }
 
             public override async Awaitable PlayCeremonyOnTurnBegin(PlayerIndex playerIndex)
             {
                 await _ctrl.OutputAsync($"### {playerIndex}'s turn begins");
-                await Noop();
             }
 
             public override async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex, BulletQueue bulletQueue)
             {
                 await _ctrl.OutputAsync("Host: A new bullet has been loaded, either live or blank.");
-                await Noop();
             }
 
             protected override async Awaitable ConsumeCardAndPlayEffect(PlayerIndex playerIndex, int itemIndex,
@@ -284,8 +296,6 @@ namespace Roulette.Scripts.SceneCtrls
                         await _ctrl.OutputAsync($"{playerIndex.Other()} is handcuffed by {playerIndex}.");
                         break;
                 }
-
-                await Noop();
             }
 
             protected override async Awaitable PlayBombEffect(PlayerIndex instigator, PlayerIndex target, bool isReal,
@@ -299,27 +309,23 @@ namespace Roulette.Scripts.SceneCtrls
                 else
                     await _ctrl.OutputAsync(
                         $"{target} does not get shot by {instigator}, because the loaded bullet was blank.");
-
-                await Noop();
             }
 
             public override async Awaitable PlayCeremonyOnTurnEnd(PlayerIndex playerIndex)
             {
                 await _ctrl.OutputAsync($"### {playerIndex}'s turn ends.");
-                await Noop();
             }
 
             public override async Awaitable PlayCeremonyOnRoundEnd()
             {
                 await _ctrl.OutputAsync("## The last round ends.");
-                await Noop();
             }
 
             public override async Awaitable PlayCeremonyOnLevelEnd(PlayerIndex winner)
             {
-                await _ctrl.OutputAsync(
-                    $"# The level completes. And the winner is {winner}. Game over will be shown in 5 seconds.");
-                await Awaitable.WaitForSecondsAsync(5.0f);
+                await _ctrl.OutputAsync($"# The level completes. And the winner is {winner}.");
+                await _ctrl.OutputAsync("Host: Now, press the `Continue` button to proceed.");
+                await _ctrl.RequireContinue();
                 _ctrl.OnLevelOver();
             }
         }
