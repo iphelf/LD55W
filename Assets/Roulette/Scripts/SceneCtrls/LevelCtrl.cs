@@ -58,10 +58,10 @@ namespace Roulette.Scripts.SceneCtrls
                 await base.DrawCardFromDeck(playerIndex, card);
             }
 
-            public override async Awaitable<int> PlaceCard(PlayerIndex playerIndex,
-                SortedDictionary<int, ItemType> existingCards, ItemType newCard)
+            public override async Awaitable AppendCard(
+                PlayerIndex playerIndex, int existingCardCount, ItemType newCard)
             {
-                return await base.PlaceCard(playerIndex, existingCards, newCard);
+                await base.AppendCard(playerIndex, existingCardCount, newCard);
             }
 
             public override async Awaitable PlayCeremonyOnTurnBegin(PlayerIndex playerIndex)
@@ -69,15 +69,14 @@ namespace Roulette.Scripts.SceneCtrls
                 await _ctrl.bannerCtrl.Present($"{playerIndex}'s turn");
             }
 
+            public override async Awaitable RegretfullyDisposeLastDrawnCard(PlayerIndex playerIndex)
+            {
+                await base.RegretfullyDisposeLastDrawnCard(playerIndex);
+            }
+
             public override async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex, BulletQueue bulletQueue)
             {
                 await base.TakeBombForNewTurn(playerIndex, bulletQueue);
-            }
-
-            public override async Awaitable<PlayerAction> WaitForPlayerAction(PlayerIndex playerIndex,
-                SortedDictionary<int, ItemType> items)
-            {
-                return await base.WaitForPlayerAction(playerIndex, items);
             }
 
             protected override async Awaitable ConsumeCardAndPlayEffect(PlayerIndex playerIndex, int itemIndex,

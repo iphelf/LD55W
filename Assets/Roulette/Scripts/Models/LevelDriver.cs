@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Roulette.Scripts.Data;
 using Roulette.Scripts.General;
 using Roulette.Scripts.Managers;
@@ -64,17 +65,30 @@ namespace Roulette.Scripts.Models
             _data.Round.BulletQueue = new BulletQueue(_config.bullets);
             await _presentation.PrepareBombsForNewRound(_data.Round.BulletQueue.Count);
 
+            var overflowHappened = new Dictionary<PlayerIndex, bool>
+            {
+                [PlayerIndex.P1] = false,
+                [PlayerIndex.P2] = false,
+            };
             for (int i = 0; i < _config.itemCountPerRound; ++i)
             {
                 foreach (var playerIndex in PlayerIndices)
                 {
+                    if (overflowHappened[playerIndex]) continue;
+
                     ItemType card = _config.SampleItem();
                     await _presentation.DrawCardFromDeck(playerIndex, card);
-
                     var player = Player(playerIndex);
-                    int position = await _presentation.PlaceCard(playerIndex, player.Items, card);
-                    if (0 <= position && position < _config.itemCapacity)
-                        player.Items.TryAdd(position, card);
+                    if (player.Items.Count >= _config.itemCapacity)
+                    {
+                        await _presentation.RegretfullyDisposeLastDrawnCard(playerIndex);
+                        overflowHappened[playerIndex] = true;
+                    }
+                    else
+                    {
+                        await _presentation.AppendCard(playerIndex, player.Items.Count, card);
+                        player.Items.Add(card);
+                    }
                 }
             }
 
@@ -152,7 +166,7 @@ namespace Roulette.Scripts.Models
                     throw new NotImplementedException($"ItemType: {item}");
             }
 
-            player.Items.Remove(playerUsesItem.ItemIndex);
+            player.Items.RemoveAt(playerUsesItem.ItemIndex);
             await _presentation.AcknowledgeItemEffect(
                 playerIndex, playerUsesItem.ItemIndex, effect, onHit);
         }
@@ -175,7 +189,14 @@ namespace Roulette.Scripts.Models
             public override ItemType Item(PlayerIndex playerIndex, int itemIndex)
             {
                 var player = _driver.Player(playerIndex);
-                return player.Items.GetValueOrDefault(itemIndex, ItemType.None);
+                if (0 <= itemIndex && itemIndex < player.Items.Count)
+                    return player.Items[itemIndex];
+                return ItemType.None;
+            }
+
+            public override ReadOnlyCollection<ItemType> Items(PlayerIndex playerIndex)
+            {
+                return _driver.Player(playerIndex).Items.AsReadOnly();
             }
 
             public override bool IsItemUsable(PlayerIndex playerIndex, ItemType item)

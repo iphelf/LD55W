@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Roulette.Scripts.General;
 using Roulette.Scripts.Managers;
@@ -47,12 +46,20 @@ namespace Roulette.Scripts.SceneCtrls
             LevelManager.CompleteLevel();
         }
 
+        private string SerializeItems(IEnumerable<ItemType> items)
+        {
+            return string.Join(", ", items);
+        }
+
         private void ShowLevelState()
         {
-            string levelState =
-                $"Status: P1={_presentation.Info.Health(PlayerIndex.P1)}, " +
-                $"P2={_presentation.Info.Health(PlayerIndex.P2)}, " +
-                $"Bullets={_presentation.Info.BulletCount}.";
+            string p1State =
+                $"HP={_presentation.Info.Health(PlayerIndex.P1)}, " +
+                $"Items={{{SerializeItems(_presentation.Info.Items(PlayerIndex.P1))}}}";
+            string p2State =
+                $"HP={_presentation.Info.Health(PlayerIndex.P2)}, " +
+                $"Items={{{SerializeItems(_presentation.Info.Items(PlayerIndex.P2))}}}";
+            string levelState = $"Status: \n  P1: {p1State}\n  P2: {p2State}";
             Output(levelState);
         }
 
@@ -118,12 +125,7 @@ namespace Roulette.Scripts.SceneCtrls
             await Awaitable.WaitForSecondsAsync(1f);
         }
 
-        private async Awaitable OutputPlacingCard(PlayerIndex playerIndex, ItemType newCard, int index)
-        {
-            await OutputAsync($"{playerIndex} puts {newCard} to {index}-th item slot.");
-        }
-
-        private async Awaitable OutputAction(PlayerIndex playerIndex, SortedDictionary<int, ItemType> items,
+        private async Awaitable OutputAction(PlayerIndex playerIndex, List<ItemType> items,
             PlayerAction action)
         {
             switch (action)
@@ -152,7 +154,7 @@ namespace Roulette.Scripts.SceneCtrls
                 _ctrl = ctrl;
             }
 
-            private PlayerAction ParseAction(PlayerIndex playerIndex, SortedDictionary<int, ItemType> items,
+            private PlayerAction ParseAction(PlayerIndex playerIndex, List<ItemType> items,
                 string input)
             {
                 var tokens = input.Split(" ");
@@ -163,7 +165,8 @@ namespace Roulette.Scripts.SceneCtrls
                         return new PlayerFiresGun(isShootingOther ? playerIndex.Other() : playerIndex);
                     case 'u': // use
                         int itemIndex = int.Parse(tokens[1]);
-                        if (!items.ContainsKey(itemIndex) || !Info.IsItemUsable(playerIndex, items[itemIndex]))
+                        if (itemIndex < 0 || itemIndex >= items.Count
+                                          || !Info.IsItemUsable(playerIndex, items[itemIndex]))
                             return null;
                         return new PlayerUsesItem(itemIndex);
                     default:
@@ -171,7 +174,7 @@ namespace Roulette.Scripts.SceneCtrls
                 }
             }
 
-            public override async Awaitable<PlayerAction> ProducePlayerAction(SortedDictionary<int, ItemType> items)
+            public override async Awaitable<PlayerAction> ProducePlayerAction(List<ItemType> items)
             {
                 await _ctrl.OutputAsync($"Host: Speak thy wish, {PlayerIndex}. (Input hint is given to the right)");
                 string input = await _ctrl.RequireInput(input =>
@@ -182,26 +185,6 @@ namespace Roulette.Scripts.SceneCtrls
                 var action = ParseAction(PlayerIndex, items, input);
                 await _ctrl.OutputAction(PlayerIndex, items, action);
                 return action;
-            }
-
-            string SerializeDict(SortedDictionary<int, ItemType> dict) =>
-                "{" + string.Join(", ", dict.Select(p => $"{p.Key}:{p.Value}")) + "}";
-
-            public override async Awaitable<int> PlaceCard(SortedDictionary<int, ItemType> existingCards,
-                ItemType newCard)
-            {
-                await _ctrl.OutputAsync($"Host: {PlayerIndex}, where do you want to place your new item {newCard}? " +
-                                        $"Note that, currently, you have {SerializeDict(existingCards)} in your hand.");
-                string input = await _ctrl.RequireInput(input =>
-                {
-                    int index = int.Parse(input);
-                    if (index >= Info.CardCapacity) return false;
-                    if (existingCards.ContainsKey(index)) return false;
-                    return true;
-                });
-                int index = int.Parse(input);
-                await _ctrl.OutputPlacingCard(PlayerIndex, newCard, index);
-                return index;
             }
         }
 
@@ -218,15 +201,7 @@ namespace Roulette.Scripts.SceneCtrls
                 _ctrl = ctrl;
             }
 
-            public override async Awaitable<int> PlaceCard(SortedDictionary<int, ItemType> existingCards,
-                ItemType newCard)
-            {
-                var index = await base.PlaceCard(existingCards, newCard);
-                await _ctrl.OutputPlacingCard(PlayerIndex, newCard, index);
-                return index;
-            }
-
-            public override async Awaitable<PlayerAction> ProducePlayerAction(SortedDictionary<int, ItemType> items)
+            public override async Awaitable<PlayerAction> ProducePlayerAction(List<ItemType> items)
             {
                 await _ctrl.OutputAsync($"{PlayerIndex} thinks for a while.");
                 var action = await base.ProducePlayerAction(items);
@@ -253,6 +228,16 @@ namespace Roulette.Scripts.SceneCtrls
             {
                 await _ctrl.OutputAsync("# A new level begins.");
                 await Noop();
+            }
+
+            public override async Awaitable AppendCard(PlayerIndex playerIndex, int existingCardCount, ItemType newCard)
+            {
+                await _ctrl.OutputAsync($"And it is added to {playerIndex}'s hand cards");
+            }
+
+            public override async Awaitable RegretfullyDisposeLastDrawnCard(PlayerIndex playerIndex)
+            {
+                await _ctrl.OutputAsync($"However, it is discarded since {playerIndex}'s hands are full");
             }
 
             public override async Awaitable PlayCeremonyOnRoundBegin()
@@ -299,7 +284,6 @@ namespace Roulette.Scripts.SceneCtrls
                         break;
                 }
 
-                await _ctrl.OutputAsync($"The {itemIndex}-th item slot of {playerIndex} has been freed.");
                 await Noop();
             }
 

@@ -11,8 +11,7 @@ namespace Roulette.Scripts.Models
         {
         }
 
-        public override async Awaitable<PlayerAction> ProducePlayerAction(
-            SortedDictionary<int, ItemType> items)
+        public override async Awaitable<PlayerAction> ProducePlayerAction(List<ItemType> items)
         {
             await Dummy.NothingButAwaitable();
             return new PlayerFiresGun(PlayerIndex.Other());
@@ -26,12 +25,6 @@ namespace Roulette.Scripts.Models
                 if (!existingCards.ContainsKey(i))
                     return i;
             return -1;
-        }
-
-        public override Awaitable<int> PlaceCard(
-            SortedDictionary<int, ItemType> existingCards, ItemType newCard)
-        {
-            return PlaceCard(existingCards, Info.CardCapacity);
         }
     }
 
@@ -52,12 +45,6 @@ namespace Roulette.Scripts.Models
             await Awaitable.WaitForSecondsAsync(Random.Range(2.0f, 4.0f));
         }
 
-        public override Awaitable<int> PlaceCard(
-            SortedDictionary<int, ItemType> existingCards, ItemType newCard)
-        {
-            return PlaceholderPlayerInput.PlaceCard(existingCards, Info.CardCapacity);
-        }
-
         /**
          * AI选择策略： <br/>
          *  <br/>
@@ -71,19 +58,18 @@ namespace Roulette.Scripts.Models
          *  实弹数/总弹数 >= 75%，不使用放大镜，选择攻击玩家 <br/>
          *  实弹数/总弹数 &lt; 75%，选择使用放大镜，如果为真攻击玩家，如果为假攻击自己 <br/>
          */
-        public override async Awaitable<PlayerAction> ProducePlayerAction(
-            SortedDictionary<int, ItemType> items)
+        public override async Awaitable<PlayerAction> ProducePlayerAction(List<ItemType> items)
         {
             await PretendToBeThinking();
 
             int indexOfHandcuffs = -1;
             int indexOfMagnifyingGlass = -1;
-            foreach (var pair in items)
+            for (int i = 0; i < items.Count; ++i)
             {
-                if (pair.Value == ItemType.HandCuffs && indexOfHandcuffs == -1)
-                    indexOfHandcuffs = pair.Key;
-                if (pair.Value == ItemType.MagnifyingGlass && indexOfMagnifyingGlass == -1)
-                    indexOfMagnifyingGlass = pair.Key;
+                if (items[i] == ItemType.HandCuffs && indexOfHandcuffs == -1)
+                    indexOfHandcuffs = i;
+                if (items[i] == ItemType.MagnifyingGlass && indexOfMagnifyingGlass == -1)
+                    indexOfMagnifyingGlass = i;
             }
 
             PlayerAction action;

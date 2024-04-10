@@ -15,7 +15,7 @@ namespace Roulette.Scripts.Models
     public record PlayerData
     {
         public int Health = 1;
-        public SortedDictionary<int, ItemType> Items = new();
+        public readonly List<ItemType> Items = new();
         public bool IsHandCuffed = false;
     }
 

@@ -52,14 +52,12 @@ namespace Roulette.Scripts.Models
         public virtual async Awaitable DrawCardFromDeck(PlayerIndex playerIndex, ItemType card)
             => await Dummy.PerformTask("从牌库翻出一张牌");
 
-        public virtual async Awaitable<int> PlaceCard(
-            PlayerIndex playerIndex,
-            SortedDictionary<int, ItemType> existingCards,
-            ItemType newCard)
-        {
-            int position = await PlayerInput(playerIndex).PlaceCard(existingCards, newCard);
-            return position;
-        }
+        public virtual async Awaitable AppendCard(
+            PlayerIndex playerIndex, int existingCardCount, ItemType newCard)
+            => await Dummy.PerformTask("将刚翻出的牌加入手牌尾部");
+
+        public virtual async Awaitable RegretfullyDisposeLastDrawnCard(PlayerIndex playerIndex)
+            => await Dummy.PerformTask("表示遗憾，并销毁刚翻出的牌");
 
         public virtual async Awaitable PlayCeremonyOnTurnBegin(PlayerIndex playerIndex)
             => await Dummy.PerformTask("回合开场仪式");
@@ -67,8 +65,8 @@ namespace Roulette.Scripts.Models
         public virtual async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex, BulletQueue bulletQueue)
             => await Dummy.PerformTask("从队列中取出一个炸弹，移动到中央鉴定区");
 
-        public virtual async Awaitable<PlayerAction> WaitForPlayerAction(
-            PlayerIndex playerIndex, SortedDictionary<int, ItemType> items)
+        public async Awaitable<PlayerAction> WaitForPlayerAction(
+            PlayerIndex playerIndex, List<ItemType> items)
         {
             var playerAction = await PlayerInput(playerIndex).ProducePlayerAction(items);
             return playerAction;
@@ -85,7 +83,7 @@ namespace Roulette.Scripts.Models
         protected virtual async Awaitable ConsumeCardAndPlayEffect(
             PlayerIndex playerIndex, int itemIndex, ItemEffect itemEffect,
             Action onHit = null)
-            => await Dummy.PerformTask("展示道具生效时的表现");
+            => await Dummy.PerformTask("展示道具被使用并随后生效的表现");
 
         public async Awaitable AcknowledgeBombExplosion(
             PlayerIndex instigator, PlayerIndex target, bool isReal,

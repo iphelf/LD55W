@@ -15,8 +15,7 @@ namespace Roulette.Scripts.Models
             PlayerIndex = playerIndex;
         }
 
-        public abstract Awaitable<PlayerAction> ProducePlayerAction(
-            SortedDictionary<int, ItemType> items);
+        public abstract Awaitable<PlayerAction> ProducePlayerAction(List<ItemType> items);
 
         public virtual void AcknowledgeBombExplosion(bool exploded)
         {
@@ -25,8 +24,5 @@ namespace Roulette.Scripts.Models
         public virtual void AcknowledgeItemEffect(ItemEffect effect)
         {
         }
-
-        public abstract Awaitable<int> PlaceCard(
-            SortedDictionary<int, ItemType> existingCards, ItemType newCard);
     }
 }
