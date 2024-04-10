@@ -96,7 +96,7 @@ namespace Roulette.Scripts.Models
                     //  实弹数/总弹数 >= 50%，选择攻击玩家
                     //  实弹数/总弹数 < 50%，选择攻击自己
                     action = new PlayerFiresGun(
-                        ratioOfReal > 0.5 ? PlayerIndex.Other() : PlayerIndex);
+                        ratioOfReal >= 0.5 ? PlayerIndex.Other() : PlayerIndex);
 
                 // 2. 有放大镜的情况下：
                 else
