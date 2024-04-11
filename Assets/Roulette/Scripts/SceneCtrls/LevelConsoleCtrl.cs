@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Roulette.Scripts.General;
 using Roulette.Scripts.Managers;
 using Roulette.Scripts.Models;
 using TMPro;
@@ -255,10 +254,10 @@ namespace Roulette.Scripts.SceneCtrls
                 await _ctrl.OutputAsync("## A new round begins.");
             }
 
-            public override async Awaitable PrepareBombsForNewRound(int count)
+            public override async Awaitable PrepareBombsForNewRound(int count, int realCount)
             {
                 await _ctrl.OutputAsync($"Host: {count} bullets are in roulette! " +
-                                        $"And {Info.CountRealBullets()} of them are live!");
+                                        $"And {realCount} of them are live!");
             }
 
             public override async Awaitable DrawCardFromDeck(PlayerIndex playerIndex, ItemType card)

@@ -46,7 +46,7 @@ namespace Roulette.Scripts.Models
         public virtual async Awaitable PlayCeremonyOnRoundBegin()
             => await Dummy.PerformTask("轮次开场仪式");
 
-        public virtual async Awaitable PrepareBombsForNewRound(int count)
+        public virtual async Awaitable PrepareBombsForNewRound(int count, int realCount)
             => await Dummy.PerformTask("为新的轮次准备炸弹");
 
         public virtual async Awaitable DrawCardFromDeck(PlayerIndex playerIndex, ItemType card)

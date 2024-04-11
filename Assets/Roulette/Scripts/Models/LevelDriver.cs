@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Roulette.Scripts.Data;
-using Roulette.Scripts.General;
 using Roulette.Scripts.Managers;
 using UnityEngine;
 
@@ -63,7 +62,10 @@ namespace Roulette.Scripts.Models
             await _presentation.PlayCeremonyOnRoundBegin();
 
             _data.Round.BulletQueue = new BulletQueue(_config.bullets);
-            await _presentation.PrepareBombsForNewRound(_data.Round.BulletQueue.Count);
+            await _presentation.PrepareBombsForNewRound(
+                _data.Round.BulletQueue.Count,
+                _data.Round.BulletQueue.CountRealBullets()
+            );
 
             var overflowHappened = new Dictionary<PlayerIndex, bool>
             {

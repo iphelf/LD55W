@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Roulette.Scripts.General;
 using Roulette.Scripts.Managers;
 using Roulette.Scripts.Models;
 using Roulette.Scripts.ViewCtrls;
@@ -100,9 +99,9 @@ namespace Roulette.Scripts.SceneCtrls
                 await base.PlayCeremonyOnRoundBegin();
             }
 
-            public override async Awaitable PrepareBombsForNewRound(int count)
+            public override async Awaitable PrepareBombsForNewRound(int count, int realCount)
             {
-                await base.PrepareBombsForNewRound(count);
+                await _ctrl.bombManager.PrepareBombsForNewRound(count, realCount);
             }
 
             public override async Awaitable DrawCardFromDeck(PlayerIndex playerIndex, ItemType card)
@@ -128,19 +127,22 @@ namespace Roulette.Scripts.SceneCtrls
 
             public override async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex, BulletQueue bulletQueue)
             {
-                await base.TakeBombForNewTurn(playerIndex, bulletQueue);
+                await _ctrl.bombManager.TakeBombForNewTurn(playerIndex, bulletQueue);
             }
 
             protected override async Awaitable ConsumeCardAndPlayEffect(PlayerIndex playerIndex, int itemIndex,
                 ItemEffect itemEffect, Action onHit = null)
             {
                 await base.ConsumeCardAndPlayEffect(playerIndex, itemIndex, itemEffect, onHit);
+                if (playerIndex == PlayerIndex.P1
+                    && itemEffect is EffectOfMagnifyingGlass effectOfMagnifyingGlass)
+                    await _ctrl.bombManager.PlayMagnifyingGlassEffect(effectOfMagnifyingGlass.IsReal);
             }
 
-            protected override async Awaitable PlayBombEffect(PlayerIndex instigator, PlayerIndex target, bool isReal,
-                Action onHit)
+            protected override async Awaitable PlayBombEffect(
+                PlayerIndex instigator, PlayerIndex target, bool isReal, Action onHit)
             {
-                await base.PlayBombEffect(instigator, target, isReal, onHit);
+                await _ctrl.bombManager.PlayBombEffect(instigator, target, isReal, onHit);
             }
 
             public override async Awaitable PlayCeremonyOnTurnEnd(PlayerIndex playerIndex)
