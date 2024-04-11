@@ -8,16 +8,17 @@ namespace Roulette.Scripts.Managers
     public static class GameManager
     {
         private static bool _initialized;
-        private static Configuration _configuration;
+        private static GameConfig _gameConfig;
 
         #region (Anywhere)
 
-        public static void InitializeGameOnce(Configuration configuration)
+        public static void InitializeGameOnce(Configuration configuration, AudioSource audioSource)
         {
             if (_initialized) return;
 
-            _configuration = configuration;
-            LevelManager.Reset(_configuration.gameConfig.levels);
+            _gameConfig = configuration.gameConfig;
+            LevelManager.Reset(_gameConfig.levels);
+            AudioManager.Initialize(_gameConfig.audioConfig, audioSource);
 
             _initialized = true;
             Debug.Log("Initialized.");
@@ -34,13 +35,13 @@ namespace Roulette.Scripts.Managers
 
         public static void StartGame()
         {
-            LevelManager.Reset(_configuration.gameConfig.levels);
-            SceneManager.LoadScene(_configuration.gameConfig.levelScene);
+            LevelManager.Reset(_gameConfig.levels);
+            SceneManager.LoadScene(_gameConfig.levelScene);
         }
 
         public static void OpenCredits()
         {
-            SceneManager.LoadScene(_configuration.gameConfig.creditsScene);
+            SceneManager.LoadScene(_gameConfig.creditsScene);
         }
 
         #endregion
@@ -49,7 +50,7 @@ namespace Roulette.Scripts.Managers
 
         public static void CloseCreditsAndOpenTitle()
         {
-            SceneManager.LoadScene(_configuration.gameConfig.titleScene);
+            SceneManager.LoadScene(_gameConfig.titleScene);
         }
 
         #endregion
@@ -59,17 +60,17 @@ namespace Roulette.Scripts.Managers
 
         public static void NewLevel()
         {
-            SceneManager.LoadScene(_configuration.gameConfig.levelScene);
+            SceneManager.LoadScene(_gameConfig.levelScene);
         }
 
         public static void OpenGameOver()
         {
-            SceneManager.LoadScene(_configuration.gameConfig.gameOverScene);
+            SceneManager.LoadScene(_gameConfig.gameOverScene);
         }
 
         public static void QuitLevelAndOpenTitle()
         {
-            SceneManager.LoadScene(_configuration.gameConfig.titleScene);
+            SceneManager.LoadScene(_gameConfig.titleScene);
         }
 
         public static void QuitLevelAndRestartGame()
@@ -83,7 +84,7 @@ namespace Roulette.Scripts.Managers
 
         public static void ReturnToTitle()
         {
-            SceneManager.LoadScene(_configuration.gameConfig.titleScene);
+            SceneManager.LoadScene(_gameConfig.titleScene);
         }
 
         public static void RestartGame()
