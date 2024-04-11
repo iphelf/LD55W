@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialHealth: 1
   bullets: 0001
-  itemCountPerRound: 1
+  itemCountPerRound: 0
   itemWeights:
   - item: 2
     weight: 1

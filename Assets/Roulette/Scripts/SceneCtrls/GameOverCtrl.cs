@@ -1,4 +1,5 @@
 using Roulette.Scripts.Managers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,27 +10,15 @@ namespace Roulette.Scripts.SceneCtrls
         [SerializeField] private Button restartButton;
         [SerializeField] private Button menuButton;
         [SerializeField] private Button quitButton;
+        [SerializeField] private TextMeshProUGUI score;
 
         void Start()
         {
-            restartButton.onClick.AddListener(RestartGame);
-            menuButton.onClick.AddListener(ReturnToMenu);
-            quitButton.onClick.AddListener(QuitGame);
+            restartButton.onClick.AddListener(GameManager.RestartGame);
+            menuButton.onClick.AddListener(GameManager.ReturnToTitle);
+            quitButton.onClick.AddListener(GameManager.QuitGame);
+            score.text = $"Score:{LevelManager._score}";
         }
-
-        void RestartGame()
-        {
-            GameManager.RestartGame();
-        }
-
-        void ReturnToMenu()
-        {
-            GameManager.ReturnToTitle();
-        }
-
-        void QuitGame()
-        {
-            GameManager.QuitGame();
-        }
+        
     }
 }

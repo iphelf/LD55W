@@ -12,7 +12,7 @@ namespace Roulette.Scripts.Managers
     {
         private static List<LevelConfig> _levels;
         public static int LevelIndex { get; private set; }
-        private static int Score=0;
+        public static int _score=0;
         
 
         public static LevelConfig Current => _levels[LevelIndex];
@@ -33,8 +33,7 @@ namespace Roulette.Scripts.Managers
         }
         public static void ScoreCalculation(int health)
         {
-            Score += health;
-            
+            _score += health;
         }
     }
 }
