@@ -62,7 +62,7 @@ namespace Roulette.Scripts.Models
         public virtual async Awaitable PlayCeremonyOnTurnBegin(PlayerIndex playerIndex)
             => await Dummy.PerformTask("回合开场仪式");
 
-        public virtual async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex, BulletQueue bulletQueue)
+        public virtual async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex)
             => await Dummy.PerformTask("从队列中取出一个炸弹，移动到中央鉴定区");
 
         public async Awaitable<PlayerAction> WaitForPlayerAction(

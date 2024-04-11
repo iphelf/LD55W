@@ -107,7 +107,7 @@ namespace Roulette.Scripts.Models
 
             await _presentation.PlayCeremonyOnTurnBegin(playerIndex);
 
-            await _presentation.TakeBombForNewTurn(playerIndex, _data.Round.BulletQueue);
+            await _presentation.TakeBombForNewTurn(playerIndex);
 
             bool turnFinished = false;
             while (!turnFinished)

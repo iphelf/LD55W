@@ -16,7 +16,7 @@ namespace Roulette.Scripts.Managers
             // TODO: 变更雷池中炸弹的数量
         }
 
-        public async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex, BulletQueue bulletQueue)
+        public async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex)
         {
             // TODO: 实现移动炸弹的平移动画
             await Dummy.PerformTask($"为{playerIndex}从队列中取出一个炸弹，移动到中央鉴定区");

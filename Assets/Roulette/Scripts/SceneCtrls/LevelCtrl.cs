@@ -125,9 +125,9 @@ namespace Roulette.Scripts.SceneCtrls
                 await base.RegretfullyDisposeLastDrawnCard(playerIndex);
             }
 
-            public override async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex, BulletQueue bulletQueue)
+            public override async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex)
             {
-                await _ctrl.bombManager.TakeBombForNewTurn(playerIndex, bulletQueue);
+                await _ctrl.bombManager.TakeBombForNewTurn(playerIndex);
             }
 
             protected override async Awaitable ConsumeCardAndPlayEffect(PlayerIndex playerIndex, int itemIndex,

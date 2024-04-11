@@ -270,7 +270,7 @@ namespace Roulette.Scripts.SceneCtrls
                 await _ctrl.OutputAsync($"### {playerIndex}'s turn begins");
             }
 
-            public override async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex, BulletQueue bulletQueue)
+            public override async Awaitable TakeBombForNewTurn(PlayerIndex playerIndex)
             {
                 await _ctrl.OutputAsync("Host: A new bullet has been loaded, either live or blank.");
             }
