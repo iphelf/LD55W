@@ -16,21 +16,24 @@ namespace Roulette.Scripts.SceneCtrls
         [SerializeField] private BuffsCtrl p1BuffsCtrl;
         [SerializeField] private BuffsCtrl p2BuffsCtrl;
         [SerializeField] private BannerCtrl bannerCtrl;
+        
+        private Presentation _presentation;
 
         private async void Start()
         {
-            Presentation presentation = new(this);
+            _presentation = new Presentation(this);
 
-            GraphicalPlayerInput playerInput = new GraphicalPlayerInput(presentation, PlayerIndex.P1, this);
-            presentation.BindPlayerInput(PlayerIndex.P1, playerInput);
-            BasicAIPlayerInput aiPlayerInput = new BasicAIPlayerInput(presentation, PlayerIndex.P2);
-            presentation.BindPlayerInput(PlayerIndex.P2, aiPlayerInput);
+            GraphicalPlayerInput playerInput = new GraphicalPlayerInput(_presentation, PlayerIndex.P1, this);
+            _presentation.BindPlayerInput(PlayerIndex.P1, playerInput);
+            BasicAIPlayerInput aiPlayerInput = new BasicAIPlayerInput(_presentation, PlayerIndex.P2);
+            _presentation.BindPlayerInput(PlayerIndex.P2, aiPlayerInput);
 
-            await LevelDriver.Drive(LevelManager.Current, presentation);
+            await LevelDriver.Drive(LevelManager.Current, _presentation);
         }
 
         private void OnLevelOver()
         {
+            LevelManager.ScoreCalculation(_presentation.Info.Health(PlayerIndex.P1));
             LevelManager.CompleteLevel();
         }
 
@@ -79,7 +82,7 @@ namespace Roulette.Scripts.SceneCtrls
                 appendingAction?.SetResult(playerAction);
             }
         }
-
+        
         private class Presentation : LevelPresentation
         {
             private readonly LevelCtrl _ctrl;

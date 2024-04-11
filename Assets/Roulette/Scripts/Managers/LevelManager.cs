@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Security.Authentication;
 using Roulette.Scripts.Data;
+using Roulette.Scripts.Models;
+using Roulette.Scripts.SceneCtrls;
+using UnityEngine;
 
 namespace Roulette.Scripts.Managers
 {
@@ -8,6 +12,8 @@ namespace Roulette.Scripts.Managers
     {
         private static List<LevelConfig> _levels;
         public static int LevelIndex { get; private set; }
+        private static int Score=0;
+        
 
         public static LevelConfig Current => _levels[LevelIndex];
 
@@ -19,13 +25,16 @@ namespace Roulette.Scripts.Managers
 
         public static void CompleteLevel()
         {
-            GameManager.OpenGameOver();
-
-            // ++LevelIndex;
-            // if (LevelIndex >= _levels.Count)
-            //     GameManager.OpenGameOver();
-            // else
-            //     GameManager.NewLevel();
+             ++LevelIndex;
+             if (LevelIndex >= _levels.Count)
+                 GameManager.OpenGameOver();
+             else
+                 GameManager.NewLevel();
+        }
+        public static void ScoreCalculation(int health)
+        {
+            Score += health;
+            
         }
     }
 }
