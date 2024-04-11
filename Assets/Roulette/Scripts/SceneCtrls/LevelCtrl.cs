@@ -21,12 +21,64 @@ namespace Roulette.Scripts.SceneCtrls
         private async void Start()
         {
             Presentation presentation = new(this);
+
+            GraphicalPlayerInput playerInput = new GraphicalPlayerInput(presentation, PlayerIndex.P1, this);
+            presentation.BindPlayerInput(PlayerIndex.P1, playerInput);
+            BasicAIPlayerInput aiPlayerInput = new BasicAIPlayerInput(presentation, PlayerIndex.P2);
+            presentation.BindPlayerInput(PlayerIndex.P2, aiPlayerInput);
+
             await LevelDriver.Drive(LevelManager.Current, presentation);
         }
 
         private void OnLevelOver()
         {
             LevelManager.CompleteLevel();
+        }
+
+        private class GraphicalPlayerInput : PlayerInput
+        {
+            private readonly LevelCtrl _ctrl;
+            private AwaitableCompletionSource<PlayerAction> _appendingAction;
+
+            public GraphicalPlayerInput(
+                LevelPresentation presentation,
+                PlayerIndex playerIndex,
+                LevelCtrl ctrl)
+                : base(presentation, playerIndex)
+            {
+                _ctrl = ctrl;
+            }
+
+            public override Awaitable<PlayerAction> ProducePlayerAction(List<ItemType> items)
+            {
+                _appendingAction ??= new AwaitableCompletionSource<PlayerAction>();
+                StartListening();
+                return _appendingAction.Awaitable;
+            }
+
+            private void StartListening()
+            {
+                _ctrl.actionsCtrl.onPlayerAction.AddListener(OnPlayerAction);
+                _ctrl.cardManager.onPlayerAction.AddListener(OnPlayerAction);
+                _ctrl.actionsCtrl.EnableActionInput();
+                _ctrl.cardManager.EnableActionInput();
+            }
+
+            private void StopListening()
+            {
+                _ctrl.actionsCtrl.DisableActionInput();
+                _ctrl.cardManager.DisableActionInput();
+                _ctrl.actionsCtrl.onPlayerAction.RemoveListener(OnPlayerAction);
+                _ctrl.cardManager.onPlayerAction.RemoveListener(OnPlayerAction);
+            }
+
+            private void OnPlayerAction(PlayerAction playerAction)
+            {
+                StopListening();
+                var appendingAction = _appendingAction;
+                _appendingAction = null;
+                appendingAction?.SetResult(playerAction);
+            }
         }
 
         private class Presentation : LevelPresentation
