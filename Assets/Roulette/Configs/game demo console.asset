@@ -19,4 +19,4 @@ MonoBehaviour:
   titleScene: Title
   creditsScene: Credits
   levelScene: LevelConsole
-  gameOverScene: GameOver
+  gameOverScene: 

@@ -1,9 +1,11 @@
+using Roulette.Scripts.Models;
 using UnityEngine;
 
 namespace Roulette.Scripts.ViewCtrls
 {
     public class CardCtrl : MonoBehaviour
     {
+        public ItemType card;
         // Start is called before the first frame update
         void Start()
         {

@@ -106,12 +106,14 @@ namespace Roulette.Scripts.SceneCtrls
 
             public override async Awaitable DrawCardFromDeck(PlayerIndex playerIndex, ItemType card)
             {
+                _ctrl.cardManager.DrawCardFromDeck(playerIndex,card);
                 await base.DrawCardFromDeck(playerIndex, card);
             }
 
             public override async Awaitable AppendCard(
                 PlayerIndex playerIndex, int existingCardCount, ItemType newCard)
             {
+                _ctrl.cardManager.AppendCard(playerIndex, existingCardCount,newCard);
                 await base.AppendCard(playerIndex, existingCardCount, newCard);
             }
 
@@ -122,6 +124,7 @@ namespace Roulette.Scripts.SceneCtrls
 
             public override async Awaitable RegretfullyDisposeLastDrawnCard(PlayerIndex playerIndex)
             {
+                _ctrl.cardManager.RegretfullyDisposeLastDrawnCard(playerIndex);
                 await base.RegretfullyDisposeLastDrawnCard(playerIndex);
             }
 

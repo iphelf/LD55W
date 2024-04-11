@@ -1,5 +1,6 @@
 ﻿using Roulette.Scripts.General;
 using Roulette.Scripts.Models;
+using Roulette.Scripts.ViewCtrls;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -7,6 +8,9 @@ namespace Roulette.Scripts.Managers
 {
     public class CardManager : MonoBehaviour
     {
+        [SerializeField] private CardRow[] PlayerHand;
+
+        public UnityEvent<PlayerUsesItem> onPlayerAction;
         public void EnableActionInput()
         {
             // TODO: 提示玩家输入
@@ -18,22 +22,20 @@ namespace Roulette.Scripts.Managers
         }
 
         // TODO: 在玩家输入后发出事件
-        public UnityEvent<PlayerUsesItem> onPlayerAction;
 
-        public async Awaitable DrawCards()
+        public void DrawCardFromDeck(PlayerIndex playerIndex, ItemType card)
         {
-            await Dummy.PerformTask("玩家抽卡");
-            await Awaitables.WhenAll(DrawToP1Hand(), DrawToP2Hand());
+            PlayerHand[(int)playerIndex-1].DrawCardFromDeck(card);
         }
 
-        private async Awaitable DrawToP1Hand()
+        public void AppendCard(PlayerIndex playerIndex, int existingCardCount, ItemType newCard)
         {
-            await Dummy.PerformTask("从牌堆抽牌，置入P1手牌区");
+            PlayerHand[(int)playerIndex-1].AppendCard(newCard);
         }
 
-        private async Awaitable DrawToP2Hand()
+        public void RegretfullyDisposeLastDrawnCard(PlayerIndex playerIndex)
         {
-            await Dummy.PerformTask("从牌堆抽牌，置入P2手牌区");
+            PlayerHand[(int)playerIndex-1].RegretfullyDisposeLastDrawnCard();
         }
     }
 }

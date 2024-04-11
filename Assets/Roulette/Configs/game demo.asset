@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: game demo
   m_EditorClassIdentifier: 
   levels:
-  - {fileID: 11400000, guid: e5675a02d58319c42bcc607d5d30712c, type: 2}
+  - {fileID: 11400000, guid: 9bc0b94df3347b34ebb8804805e71a85, type: 2}
   - {fileID: 11400000, guid: 939c6d9106832064582b5421403728ae, type: 2}
   - {fileID: 11400000, guid: 51053f1580036514b8f3c8dc07d88b8b, type: 2}
+  titleScene: Title
+  creditsScene: Credits
+  levelScene: Level
+  gameOverScene: Gameover
