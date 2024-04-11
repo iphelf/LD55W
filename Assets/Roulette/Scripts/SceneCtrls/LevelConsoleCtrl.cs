@@ -51,6 +51,7 @@ namespace Roulette.Scripts.SceneCtrls
 
         private void OnLevelOver()
         {
+            LevelManager.ScoreCalculation(_presentation.Info.Health(PlayerIndex.P1));
             LevelManager.CompleteLevel();
         }
 

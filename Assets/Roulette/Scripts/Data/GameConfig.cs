@@ -14,5 +14,7 @@ namespace Roulette.Scripts.Data
         [Scene] public string creditsScene = "Credits";
         [Scene] public string levelScene = "Level";
         [Scene] public string gameOverScene = "GameOver";
+
+        [Space] public AudioConfig audioConfig;
     }
 }

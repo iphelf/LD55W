@@ -12,7 +12,7 @@ namespace Roulette.Scripts.Managers
 
         public async Awaitable PrepareBombsForNewRound(int count, int realCount)
         {
-            await bannerCtrl.Present($"{count} bombs; {realCount} real");
+            await bannerCtrl.Present($"Bombs: {count}\nTrue Bombs: {realCount}");
             // TODO: 变更雷池中炸弹的数量
         }
 

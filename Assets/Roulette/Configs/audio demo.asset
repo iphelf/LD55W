@@ -9,15 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b922ff675f64364aee18f1259b4ac5b, type: 3}
-  m_Name: level 3 demo
+  m_Script: {fileID: 11500000, guid: 806991cf75c04dadbd7e2b6e8287feef, type: 3}
+  m_Name: audio demo
   m_EditorClassIdentifier: 
-  initialHealth: 1
-  bullets: 0001
-  itemCountPerRound: 0
-  itemWeights:
-  - item: 2
-    weight: 1
-  - item: 4
-    weight: 1
-  itemCapacity: 2

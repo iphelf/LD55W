@@ -10,12 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7c8cd004a4ab4d408fea6b282f4728c0, type: 3}
-  m_Name: game demo console
+  m_Name: game for PH
   m_EditorClassIdentifier: 
   levels:
   - {fileID: 11400000, guid: e5675a02d58319c42bcc607d5d30712c, type: 2}
-  - {fileID: 11400000, guid: 939c6d9106832064582b5421403728ae, type: 2}
-  - {fileID: 11400000, guid: 51053f1580036514b8f3c8dc07d88b8b, type: 2}
   titleScene: Title
   creditsScene: Credits
   levelScene: LevelConsole

@@ -8,10 +8,21 @@ namespace Roulette.Scripts.ViewCtrls
     public class PotentialGameEntry : MonoBehaviour
     {
         [SerializeField] private Configuration configuration;
+        [SerializeField] private AudioSource audioSource;
 
         private void Awake()
         {
-            GameManager.InitializeGameOnce(configuration);
+            GameObject[] objs = GameObject.FindGameObjectsWithTag("DontDestroyOnLoad");
+
+            if (objs.Length > 1)
+            {
+                Destroy(gameObject);
+                return;
+            }
+
+            DontDestroyOnLoad(gameObject);
+
+            GameManager.InitializeGameOnce(configuration, audioSource);
         }
     }
 }
