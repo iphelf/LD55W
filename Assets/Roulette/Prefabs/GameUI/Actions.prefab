@@ -65,7 +65,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Denonate
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: Attack
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 8703901317233158856}
   - component: {fileID: 3762889164431581895}
   m_Layer: 5
-  m_Name: Button B
+  m_Name: Denonate Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -511,6 +511,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0fc9c81b209755b43acbc3e78a1029ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  content: {fileID: 6306815960387891923}
+  contentAttack: {fileID: 4189438181373915724}
+  contentDenonate: {fileID: 2031087264404048488}
+  attackButton: {fileID: 1338228973861242941}
+  denonateButton: {fileID: 3762889164431581895}
+  onPlayerAction:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &4189438181373915724
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,7 +532,7 @@ GameObject:
   - component: {fileID: 8896667000389025524}
   - component: {fileID: 1338228973861242941}
   m_Layer: 5
-  m_Name: Button A
+  m_Name: Attack Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -665,10 +673,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5052912382731963464}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 306.5, y: -73.96667}
+  m_SizeDelta: {x: 229.54, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4270039394740911653
 CanvasRenderer:
