@@ -149,6 +149,7 @@ namespace Roulette.Scripts.SceneCtrls
                 PlayerIndex instigator, PlayerIndex target, bool isReal, Action onHit)
             {
                 await _ctrl.bombManager.PlayBombEffect(instigator, target, isReal, onHit);
+                await _ctrl.bombManager.PlayMagnifyingGlassEffect(isReal);
             }
 
             public override async Awaitable PlayCeremonyOnTurnEnd(PlayerIndex playerIndex)

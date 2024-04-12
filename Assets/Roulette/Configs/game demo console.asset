@@ -19,5 +19,5 @@ MonoBehaviour:
   titleScene: Title
   creditsScene: Credits
   levelScene: LevelConsole
-  gameOverScene: GameOver
+  gameOverScene: 
   audioConfig: {fileID: 11400000, guid: b80ecd56139a9b54dad932b631b9cabf, type: 2}
